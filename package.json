@@ -1,0 +1,24 @@
+{
+  "name": "contentful-wizard",
+  "version": "0.0.1",
+  "description": "This is a library to add interactive content explorer to your contentful-powered project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bloomca/contentful-wizard.git"
+  },
+  "keywords": [
+    "contentful",
+    "wizard",
+    "explore"
+  ],
+  "author": "Seva Zaikov <seva.zaikov@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bloomca/contentful-wizard/issues"
+  },
+  "homepage": "https://github.com/Bloomca/contentful-wizard#readme"
+}
