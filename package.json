@@ -2,8 +2,27 @@
   "name": "contentful-wizard",
   "version": "0.0.1",
   "description": "This is a library to add interactive content explorer to your contentful-powered project.",
-  "main": "index.js",
+  "jsnext:main": "lib/es2015/index.js",
+  "module": "lib/es2015/index.js",
+  "typings": "lib/es2015/index.d.ts",
+  "main": "lib/commonjs/index.js",
+  "files": [
+    "lib",
+    "dist",
+    "src",
+    "README.md",
+    "package.json"
+  ],
   "scripts": {
+    "clean": "rimraf lib dist coverage",
+    "prepublish": "npm run clean && npm run test && npm run build",
+    "build:es2015": "tsc -P tsconfig.json",
+    "build:es2015:watch": "tsc --watch -P tsconfig.json",
+    "build:commonjs": "tsc -P tsconfig.commonjs.json",
+    "build:umd": "cross-env NODE_ENV=development rollup -c -i lib/es2015/index.js -o dist/redux-tiles.js",
+    "build:umd:min": "cross-env NODE_ENV=production rollup -c -i lib/es2015/index.js -o dist/redux-tiles.min.js",
+    "build:dist": "npm run build:umd && npm run build:umd:min",
+    "build": "npm run build:es2015 && npm run build:commonjs && npm run build:dist",
     "test": "jest"
   },
   "repository": {
@@ -20,5 +39,19 @@
   "bugs": {
     "url": "https://github.com/Bloomca/contentful-wizard/issues"
   },
-  "homepage": "https://github.com/Bloomca/contentful-wizard#readme"
+  "homepage": "https://github.com/Bloomca/contentful-wizard#readme",
+  "dependencies": {
+    "contentful": "^5.0.5"
+  },
+  "devDependencies": {
+    "cross-env": "^5.1.1",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.52.1",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "typescript": "^2.6.2"
+  }
 }
