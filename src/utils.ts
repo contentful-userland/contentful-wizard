@@ -91,16 +91,22 @@ export function renderOverlay({ node }: { node: HTMLElement }) {
   const offsetX = window.pageXOffset;
 
   const overlay = document.createElement("div");
-  overlay.style.position = "absolute";
-  overlay.style.opacity = "0";
-  overlay.style.boxSizing = "border-box";
-  // let's hope we override everything
-  overlay.style.zIndex = "999";
-  overlay.style.background = "red";
-  overlay.style.top = `${offsetY + top}px`;
-  overlay.style.height = `${bottom - top}px`;
-  overlay.style.left = `${offsetX + left}px`;
-  overlay.style.width = `${right - left}px`;
+
+  applyStyle({
+    node: overlay,
+    style: {
+      position: "absolute",
+      opacity: "0",
+      boxSizing: "border-box",
+      // let's hope we override everything
+      zIndex: "999",
+      background: "red",
+      top: `${offsetY + top}px`,
+      height: `${bottom - top}px`,
+      left: `${offsetX + left}px`,
+      width: `${right - left}px`
+    }
+  });
 
   document.body.appendChild(overlay);
 
@@ -122,4 +128,14 @@ export function renderOverlay({ node }: { node: HTMLElement }) {
       console.log("error during removing overlay::", e);
     }
   };
+}
+
+export function applyStyle({
+  node,
+  style
+}: {
+  node: HTMLElement;
+  style: { [key: string]: string };
+}): void {
+  Object.assign(node.style, style);
 }

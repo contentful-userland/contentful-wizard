@@ -1,7 +1,7 @@
 import { fetch, IEntity } from "./fetch";
 import { clients } from "./init";
 import { contentTypes, entries } from "./state";
-import { animate, renderOverlay } from "./utils";
+import { animate, renderOverlay, applyStyle } from "./utils";
 import {
   onHover,
   constructSpaceURL,
@@ -26,23 +26,36 @@ export function showPopup({
   const offsetY = window.pageYOffset;
 
   const tooltip: HTMLElement = document.createElement("div");
-  tooltip.style.position = "absolute";
-  tooltip.style.background = "#fff";
-  tooltip.style.zIndex = "999";
-  tooltip.style.minWidth = "150px";
-  tooltip.style.maxWidth = "350px";
-  tooltip.style.padding = "15px";
-  tooltip.style.left = `${right - 5}px`;
-  tooltip.style.top = `${top + 30}px`;
-  tooltip.style.border = "1px solid #ccc";
-  tooltip.style.borderRadius = "3px";
+  applyStyle({
+    node: tooltip,
+    style: {
+      position: "absolute",
+      background: "#fff",
+      zIndex: "999",
+      minWidth: "150px",
+      maxWidth: "350px",
+      padding: "15px",
+      left: `${right - 5}px`,
+      top: `${top + 30}px`,
+      border: "1px solid #ccc",
+      borderRadius: "3px",
+      opacity: "0"
+    }
+  });
 
   tooltip.innerHTML = "loading...";
-  tooltip.style.opacity = "0";
 
-  fetchContent({ spaceId, contentType, entry }).then(content => {
-    tooltip.innerHTML = "";
-    tooltip.appendChild(content);
+  const { promise, cleanup: cleanupContent } = fetchContent({
+    spaceId,
+    contentType,
+    entry
+  });
+
+  promise.then(content => {
+    if (content) {
+      tooltip.innerHTML = "";
+      tooltip.appendChild(content);
+    }
   });
 
   document.body.appendChild(tooltip);
@@ -71,6 +84,7 @@ export function showPopup({
           start: 1,
           stop: 0
         });
+        cleanupContent();
         cleanupHover();
         document.body.removeChild(tooltip);
       } catch (e) {
@@ -89,61 +103,50 @@ function fetchContent({
   contentType: string;
   entry: string;
 }) {
+  let closed = false;
   const client = clients[spaceId];
-  return fetch({ client, contentType, entry }).then(({ contentTypesData }) => {
-    const ctsContainer = document.createElement("div");
-    Object.keys(contentTypes)
-      .map(key => ({ nodes: contentTypes[key], data: contentTypesData[key] }))
-      .forEach(({ nodes = [], data }: { data: IEntity; nodes: any[] }) => {
-        const element = document.createElement("a");
-        const link = constructContentTypeURL({
+  const cleanupFns: Function[] = [];
+  const promise = fetch({ client, contentType, entry }).then(
+    ({ contentTypesData }) => {
+      if (!closed) {
+        const container = document.createElement("div");
+        const { node: ctsContainer, cleanup } = renderContentTypes({
+          contentTypesData,
+          spaceId
+        });
+        cleanupFns.push(cleanup);
+
+        const spaceURL = constructSpaceURL({ spaceId });
+        const contentTypeURL = constructContentTypeURL({
           spaceId,
-          contentType: data.sys.id
+          contentType
         });
-        element.setAttribute("href", link);
-        element.innerHTML = data.name || "";
-        element.style.display = "block";
-        element.style.borderBottom = "1px dashed #ccc";
-        element.style.marginBottom = "5px";
-
-        let overlays: Function[] = [];
-
-        onHover({
-          node: element,
-          onMouseEnter: () => {
-            nodes.forEach(node => {
-              overlays.push(renderOverlay({ node }));
-            });
-          },
-          onMouseLeave: () => {
-            overlays.forEach(fn => fn());
-            overlays = [];
-          }
+        const entryURL = constructEntryURL({ spaceId, entry });
+        const spaceLink = renderLink({ href: spaceURL, text: "Link to space" });
+        const ctLink = renderLink({
+          href: contentTypeURL,
+          text: "Link to content type"
         });
+        const entryLink = renderLink({ href: entryURL, text: "Link to entry" });
 
-        ctsContainer.appendChild(element);
-      });
+        container.appendChild(spaceLink);
+        container.appendChild(ctLink);
+        container.appendChild(entryLink);
 
-    const container = document.createElement("div");
+        container.appendChild(ctsContainer);
 
-    const spaceURL = constructSpaceURL({ spaceId });
-    const contentTypeURL = constructContentTypeURL({ spaceId, contentType });
-    const entryURL = constructEntryURL({ spaceId, entry });
-    const spaceLink = renderLink({ href: spaceURL, text: "Link to space" });
-    const ctLink = renderLink({
-      href: contentTypeURL,
-      text: "Link to content type"
-    });
-    const entryLink = renderLink({ href: entryURL, text: "Link to entry" });
+        return container;
+      }
+    }
+  );
 
-    container.appendChild(spaceLink);
-    container.appendChild(ctLink);
-    container.appendChild(entryLink);
-
-    container.appendChild(ctsContainer);
-
-    return container;
-  });
+  return {
+    promise,
+    cleanup: () => {
+      closed = true;
+      cleanupFns.forEach(fn => fn());
+    }
+  };
 }
 
 function renderLink({ text, href }: { text: string; href: string }) {
@@ -151,9 +154,77 @@ function renderLink({ text, href }: { text: string; href: string }) {
   link.setAttribute("href", href);
   link.setAttribute("target", "_blank");
   link.innerHTML = text;
-  link.style.textDecoration = "underline";
-  link.style.color = "blue";
-  link.style.display = "block";
+
+  applyStyle({
+    node: link,
+    style: {
+      textDecoration: "underline",
+      color: "blue",
+      display: "block"
+    }
+  });
 
   return link;
+}
+
+function renderContentTypes({
+  contentTypesData,
+  spaceId
+}: {
+  contentTypesData: { [key: string]: any };
+  spaceId: string;
+}) {
+  const ctsContainer = document.createElement("div");
+  const header = document.createElement("h3");
+  header.innerHTML = "Content types on the page:";
+  ctsContainer.appendChild(header);
+  const cleanupFns: Function[] = [];
+  Object.keys(contentTypes)
+    .map(key => ({ nodes: contentTypes[key], data: contentTypesData[key] }))
+    .forEach(({ nodes = [], data }: { data: IEntity; nodes: any[] }) => {
+      const element = document.createElement("div");
+      const linkNode = document.createElement("a");
+      const link = constructContentTypeURL({
+        spaceId,
+        contentType: data.sys.id
+      });
+      linkNode.setAttribute("href", link);
+      linkNode.innerHTML = data.name || "";
+      applyStyle({
+        node: linkNode,
+        style: {
+          display: "inline-block",
+          borderBottom: "1px dashed #ccc",
+          paddingBottom: "2px",
+          marginBottom: "5px"
+        }
+      });
+
+      let overlays: Function[] = [];
+
+      const cleanup = onHover({
+        node: linkNode,
+        onMouseEnter: () => {
+          nodes.forEach(node => {
+            overlays.push(renderOverlay({ node }));
+          });
+        },
+        onMouseLeave: () => {
+          overlays.forEach(fn => fn());
+          overlays = [];
+        }
+      });
+
+      cleanupFns.push(cleanup);
+
+      element.appendChild(linkNode);
+      ctsContainer.appendChild(element);
+    });
+
+  return {
+    node: ctsContainer,
+    cleanup: () => {
+      cleanupFns.forEach(fn => fn());
+    }
+  };
 }
