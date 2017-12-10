@@ -90,10 +90,7 @@ export function renderOverlay({ node }: { node: HTMLElement }) {
   const offsetY = window.pageYOffset;
   const offsetX = window.pageXOffset;
 
-  const overlay = document.createElement("div");
-
-  applyStyle({
-    node: overlay,
+  const overlay = createElement({
     style: {
       position: "absolute",
       opacity: "0",
@@ -138,4 +135,38 @@ export function applyStyle({
   style: { [key: string]: string };
 }): void {
   Object.assign(node.style, style);
+}
+
+export function createElement({
+  tag = "div",
+  text,
+  style,
+  attrs
+}: {
+  tag?: "div" | "img" | "a" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span";
+  text?: string;
+  style?: { [key: string]: string };
+  attrs?: { [key: string]: string };
+}): HTMLElement {
+  const element = document.createElement(tag);
+  if (text) {
+    element.innerHTML = text;
+  }
+
+  if (style) {
+    applyStyle({
+      node: element,
+      style
+    });
+  }
+
+  if (attrs) {
+    Object.keys(attrs).forEach(attr => {
+      const value = attrs[attr];
+
+      element.setAttribute(attr, value);
+    });
+  }
+
+  return element;
 }

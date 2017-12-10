@@ -32,7 +32,7 @@ export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
   });
 
   function onMouseEnter() {
-    node.style.border = "5px solid red";
+    node.style.border = "3px solid red";
     const popupData = showPopup({
       node,
       spaceId,

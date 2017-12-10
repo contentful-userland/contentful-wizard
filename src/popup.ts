@@ -1,13 +1,14 @@
 import { fetch, IEntity } from "./fetch";
 import { clients } from "./init";
 import { contentTypes, entries } from "./state";
-import { animate, renderOverlay, applyStyle } from "./utils";
+import { animate, renderOverlay, applyStyle, createElement } from "./utils";
 import {
   onHover,
   constructSpaceURL,
   constructContentTypeURL,
   constructEntryURL
 } from "./utils";
+import { createClient } from "contentful";
 
 export function showPopup({
   node,
@@ -25,9 +26,7 @@ export function showPopup({
   const { top, left, right } = node.getBoundingClientRect();
   const offsetY = window.pageYOffset;
 
-  const tooltip: HTMLElement = document.createElement("div");
-  applyStyle({
-    node: tooltip,
+  const tooltip: HTMLElement = createElement({
     style: {
       position: "absolute",
       background: "#fff",
@@ -37,13 +36,12 @@ export function showPopup({
       padding: "15px",
       left: `${right - 5}px`,
       top: `${top + 30}px`,
-      border: "1px solid #ccc",
-      borderRadius: "3px",
+      border: "2px solid #ccc",
+      borderRadius: "5px",
       opacity: "0"
-    }
+    },
+    text: "loading..."
   });
-
-  tooltip.innerHTML = "loading...";
 
   const { promise, cleanup: cleanupContent } = fetchContent({
     spaceId,
@@ -150,21 +148,19 @@ function fetchContent({
 }
 
 function renderLink({ text, href }: { text: string; href: string }) {
-  const link = document.createElement("a");
-  link.setAttribute("href", href);
-  link.setAttribute("target", "_blank");
-  link.innerHTML = text;
-
-  applyStyle({
-    node: link,
+  return createElement({
+    tag: "a",
+    attrs: {
+      href,
+      target: "_blank"
+    },
+    text,
     style: {
       textDecoration: "underline",
       color: "blue",
       display: "block"
     }
   });
-
-  return link;
 }
 
 function renderContentTypes({
@@ -175,23 +171,40 @@ function renderContentTypes({
   spaceId: string;
 }) {
   const ctsContainer = document.createElement("div");
-  const header = document.createElement("h3");
-  header.innerHTML = "Content types on the page:";
+  const line = createElement({
+    style: {
+      height: "1px",
+      margin: "10px 0",
+      background: "#ccc"
+    }
+  });
+  const header = createElement({
+    tag: "h3",
+    text: "Content types on the page:",
+    style: {
+      marginTop: "0",
+      marginBottom: "10px"
+    }
+  });
+
   ctsContainer.appendChild(header);
   const cleanupFns: Function[] = [];
   Object.keys(contentTypes)
     .map(key => ({ nodes: contentTypes[key], data: contentTypesData[key] }))
     .forEach(({ nodes = [], data }: { data: IEntity; nodes: any[] }) => {
       const element = document.createElement("div");
-      const linkNode = document.createElement("a");
       const link = constructContentTypeURL({
         spaceId,
         contentType: data.sys.id
       });
-      linkNode.setAttribute("href", link);
-      linkNode.innerHTML = data.name || "";
-      applyStyle({
-        node: linkNode,
+
+      const linkNode = createElement({
+        tag: "a",
+        attrs: {
+          href: link,
+          target: "_blank"
+        },
+        text: data.name || "No name property!",
         style: {
           display: "inline-block",
           borderBottom: "1px dashed #ccc",
