@@ -36,7 +36,7 @@ export function fetch({
   }
 
   if (!entriesPromise) {
-    const entriesPromise = client
+    entriesPromise = client
       .getEntries({
         // maximum – we should try to download everything
         limit: 1000
@@ -66,7 +66,7 @@ export function fetch({
 
       if (!entryFetchedData) {
         return client.getEntry(contentType).then(item => {
-          contentTypesData[item.sys.id] = item;
+          entriesData[item.sys.id] = item;
         });
       }
     })

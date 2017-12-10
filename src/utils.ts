@@ -42,7 +42,7 @@ export function onHover({
   }
 
   function internalMouseLeave(e: MouseEvent) {
-    onMouseEnter && onMouseLeave(e);
+    onMouseLeave && onMouseLeave(e);
     node.removeEventListener("mouseleave", internalMouseLeave);
   }
 
