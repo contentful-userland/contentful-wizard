@@ -35,7 +35,7 @@ export function showPopup({
       maxWidth: "350px",
       padding: "15px",
       left: `${right - 5}px`,
-      top: `${top + 30}px`,
+      top: `${offsetY + top + 30}px`,
       border: "2px solid #ccc",
       borderRadius: "5px",
       opacity: "0"
@@ -187,6 +187,7 @@ function renderContentTypes({
     }
   });
 
+  ctsContainer.appendChild(line);
   ctsContainer.appendChild(header);
   const cleanupFns: Function[] = [];
   Object.keys(contentTypes)
@@ -222,16 +223,21 @@ function renderContentTypes({
             overlays.push(renderOverlay({ node }));
           });
         },
-        onMouseLeave: () => {
-          overlays.forEach(fn => fn());
-          overlays = [];
-        }
+        onMouseLeave: cleanOverlays
       });
 
-      cleanupFns.push(cleanup);
+      cleanupFns.push(() => {
+        cleanOverlays();
+        cleanup();
+      });
 
       element.appendChild(linkNode);
       ctsContainer.appendChild(element);
+
+      function cleanOverlays() {
+        overlays.forEach(fn => fn());
+        overlays = [];
+      }
     });
 
   return {
