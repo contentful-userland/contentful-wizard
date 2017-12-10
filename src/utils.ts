@@ -59,7 +59,7 @@ function sleep(amount: number): Promise<void> {
 
 export function animate({
   node,
-  time = 500,
+  time = 200,
   start,
   stop,
   property = "opacity"
@@ -76,7 +76,7 @@ export function animate({
     const period = (stop - start) / steps;
 
     for (let i = 0; i < steps; i++) {
-      node.style[property] = String(start - period * i);
+      node.style[property] = String(start + period * i);
       await sleep(time / steps);
     }
 
@@ -111,10 +111,15 @@ export function renderOverlay({ node }: { node: HTMLElement }) {
   });
 
   return async () => {
-    await animate({
-      node: overlay,
-      start: 0.25,
-      stop: 0
-    });
+    try {
+      await animate({
+        node: overlay,
+        start: 0.25,
+        stop: 0
+      });
+      document.body.removeChild(overlay);
+    } catch (e) {
+      console.log("error during removing overlay::", e);
+    }
   };
 }

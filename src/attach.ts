@@ -33,7 +33,13 @@ export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
 
   function onMouseEnter() {
     node.style.border = "5px solid red";
-    const popupData = showPopup({ node, spaceId, entry, contentType, cleanup });
+    const popupData = showPopup({
+      node,
+      spaceId,
+      entry,
+      contentType,
+      cleanup: internalMouseLeave
+    });
     destroyPopup = popupData.destroy;
     popupNode = popupData.node;
   }
@@ -42,13 +48,17 @@ export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
     const toNode = e.relatedTarget;
 
     if (toNode !== popupNode) {
-      destroyPopup && destroyPopup();
-      destroyPopup = null;
-      node.style.border = "3px dashed red";
+      internalMouseLeave();
     }
   }
 
   return cleanup;
+
+  function internalMouseLeave() {
+    destroyPopup && destroyPopup();
+    destroyPopup = null;
+    node.style.border = "3px dashed red";
+  }
 
   function cleanup() {
     contentTypes[contentType] = contentTypes[contentType].filter(

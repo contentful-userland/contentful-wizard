@@ -49,10 +49,8 @@ export function showPopup({
 
   animate({
     node: tooltip,
-    time: 500,
     start: 0,
-    stop: 1,
-    property: "opacity"
+    stop: 1
   });
 
   const cleanupHover = onHover({
@@ -67,15 +65,17 @@ export function showPopup({
   return {
     node: tooltip,
     destroy: async () => {
-      await animate({
-        node: tooltip,
-        time: 500,
-        start: 1,
-        stop: 0,
-        property: "opacity"
-      });
-      cleanupHover();
-      document.body.removeChild(tooltip);
+      try {
+        await animate({
+          node: tooltip,
+          start: 1,
+          stop: 0
+        });
+        cleanupHover();
+        document.body.removeChild(tooltip);
+      } catch (e) {
+        console.log("error during removing tooltip::", e);
+      }
     }
   };
 }
@@ -103,7 +103,7 @@ function fetchContent({
         element.setAttribute("href", link);
         element.innerHTML = data.name || "";
 
-        const overlays: Function[] = [];
+        let overlays: Function[] = [];
 
         onHover({
           node: element,
@@ -114,6 +114,7 @@ function fetchContent({
           },
           onMouseLeave: () => {
             overlays.forEach(fn => fn());
+            overlays = [];
           }
         });
 
