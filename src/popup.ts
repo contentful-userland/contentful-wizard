@@ -102,6 +102,9 @@ function fetchContent({
         });
         element.setAttribute("href", link);
         element.innerHTML = data.name || "";
+        element.style.display = "block";
+        element.style.borderBottom = "1px dashed #ccc";
+        element.style.marginBottom = "5px";
 
         let overlays: Function[] = [];
 
@@ -126,18 +129,12 @@ function fetchContent({
     const spaceURL = constructSpaceURL({ spaceId });
     const contentTypeURL = constructContentTypeURL({ spaceId, contentType });
     const entryURL = constructEntryURL({ spaceId, entry });
-    const spaceLink = document.createElement("a");
-    spaceLink.setAttribute("href", spaceURL);
-    spaceLink.setAttribute("target", "_blank");
-    spaceLink.innerHTML = "Link to space";
-    const ctLink = document.createElement("a");
-    ctLink.setAttribute("href", contentTypeURL);
-    ctLink.setAttribute("target", "_blank");
-    ctLink.innerHTML = "Link to content type";
-    const entryLink = document.createElement("a");
-    entryLink.setAttribute("href", entryURL);
-    entryLink.setAttribute("target", "_blank");
-    entryLink.innerHTML = "Link to entry";
+    const spaceLink = renderLink({ href: spaceURL, text: "Link to space" });
+    const ctLink = renderLink({
+      href: contentTypeURL,
+      text: "Link to content type"
+    });
+    const entryLink = renderLink({ href: entryURL, text: "Link to entry" });
 
     container.appendChild(spaceLink);
     container.appendChild(ctLink);
@@ -147,4 +144,16 @@ function fetchContent({
 
     return container;
   });
+}
+
+function renderLink({ text, href }: { text: string; href: string }) {
+  const link = document.createElement("a");
+  link.setAttribute("href", href);
+  link.setAttribute("target", "_blank");
+  link.innerHTML = text;
+  link.style.textDecoration = "underline";
+  link.style.color = "blue";
+  link.style.display = "block";
+
+  return link;
 }
