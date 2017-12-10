@@ -1,6 +1,7 @@
 import { fetch, IEntity } from "./fetch";
 import { clients } from "./init";
 import { contentTypes, entries } from "./state";
+import { animate, renderOverlay } from "./utils";
 import {
   onHover,
   constructSpaceURL,
@@ -9,18 +10,87 @@ import {
 } from "./utils";
 
 export function showPopup({
-  // node,
+  node,
   spaceId,
   contentType,
-  entry
+  entry,
+  cleanup
 }: {
   node: HTMLElement;
   spaceId: string;
   contentType: string;
   entry: string;
+  cleanup: Function;
+}) {
+  const { top, left, right } = node.getBoundingClientRect();
+  const offsetY = window.pageYOffset;
+
+  const tooltip: HTMLElement = document.createElement("div");
+  tooltip.style.position = "absolute";
+  tooltip.style.background = "#fff";
+  tooltip.style.zIndex = "999";
+  tooltip.style.minWidth = "150px";
+  tooltip.style.maxWidth = "350px";
+  tooltip.style.padding = "15px";
+  tooltip.style.left = `${right - 5}px`;
+  tooltip.style.top = `${top + 30}px`;
+  tooltip.style.border = "1px solid #ccc";
+  tooltip.style.borderRadius = "3px";
+
+  tooltip.innerHTML = "loading...";
+  tooltip.style.opacity = "0";
+
+  fetchContent({ spaceId, contentType, entry }).then(content => {
+    tooltip.innerHTML = "";
+    tooltip.appendChild(content);
+  });
+
+  document.body.appendChild(tooltip);
+
+  animate({
+    node: tooltip,
+    time: 500,
+    start: 0,
+    stop: 1,
+    property: "opacity"
+  });
+
+  const cleanupHover = onHover({
+    node: tooltip,
+    onMouseLeave: (e: MouseEvent) => {
+      if (e.relatedTarget !== node) {
+        cleanup();
+      }
+    }
+  });
+
+  return {
+    node: tooltip,
+    destroy: async () => {
+      await animate({
+        node: tooltip,
+        time: 500,
+        start: 1,
+        stop: 0,
+        property: "opacity"
+      });
+      cleanupHover();
+      document.body.removeChild(tooltip);
+    }
+  };
+}
+
+function fetchContent({
+  spaceId,
+  contentType,
+  entry
+}: {
+  spaceId: string;
+  contentType: string;
+  entry: string;
 }) {
   const client = clients[spaceId];
-  fetch({ client, contentType, entry }).then(({ contentTypesData }) => {
+  return fetch({ client, contentType, entry }).then(({ contentTypesData }) => {
     const ctsContainer = document.createElement("div");
     Object.keys(contentTypes)
       .map(key => ({ nodes: contentTypes[key], data: contentTypesData[key] }))
@@ -33,17 +103,17 @@ export function showPopup({
         element.setAttribute("href", link);
         element.innerHTML = data.name || "";
 
+        const overlays: Function[] = [];
+
         onHover({
           node: element,
           onMouseEnter: () => {
             nodes.forEach(node => {
-              node.style.background = "red";
+              overlays.push(renderOverlay({ node }));
             });
           },
           onMouseLeave: () => {
-            nodes.forEach(node => {
-              node.style.background = "";
-            });
+            overlays.forEach(fn => fn());
           }
         });
 
@@ -74,8 +144,6 @@ export function showPopup({
 
     container.appendChild(ctsContainer);
 
-    document.body.appendChild(container);
+    return container;
   });
-
-  return () => {};
 }

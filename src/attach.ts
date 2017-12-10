@@ -19,7 +19,8 @@ export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
   }
   contentTypes[contentType].push(node);
   entries[entry].push(node);
-  let destroyPopup: any;
+  let destroyPopup: Function | null;
+  let popupNode: HTMLElement | null;
 
   node.style.border = "3px dashed red";
   // 1. add style to indicate that you can hover
@@ -32,14 +33,24 @@ export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
 
   function onMouseEnter() {
     node.style.border = "5px solid red";
-    destroyPopup = showPopup({ node, spaceId, entry, contentType });
+    const popupData = showPopup({ node, spaceId, entry, contentType, cleanup });
+    destroyPopup = popupData.destroy;
+    popupNode = popupData.node;
   }
 
-  function onMouseLeave() {
-    node.style.border = "3px dashed red";
+  function onMouseLeave(e: MouseEvent) {
+    const toNode = e.relatedTarget;
+
+    if (toNode !== popupNode) {
+      destroyPopup && destroyPopup();
+      destroyPopup = null;
+      node.style.border = "3px dashed red";
+    }
   }
 
-  return () => {
+  return cleanup;
+
+  function cleanup() {
     contentTypes[contentType] = contentTypes[contentType].filter(
       (nodeForCT: HTMLElement) => nodeForCT !== node
     );
@@ -48,5 +59,5 @@ export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
     );
     destroyPopup && destroyPopup();
     cleanHover && cleanHover();
-  };
+  }
 }
