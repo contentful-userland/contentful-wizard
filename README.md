@@ -21,17 +21,63 @@ First, you need to include this library into your application. It will add a glo
 </div>
 
 <script>
-const wizard = CTFLWizard.init({
+CTFLWizard.init({
   spaceId: 's25qxvg',
   key: 'f78aw812mlswwasw' // your API key
 });
-
-// after some time, after your content on the page has changed
-wizard.update();
-
-// or if you want to remove it
-wizard.destroy();
 </script>
+```
+
+## Entry titles
+
+Since entries don't have `name` property, as content types do, in order to list them in human-readable form, it is always good to provide `entryTitle` property with the strategy to guess which field should be used:
+
+```js
+CTFLWizard.init({
+  spaceId: 's25qxvg',
+  key: 'f78aw812mlswwasw', // your API key
+  // if all your entries should show this field's value
+  entryTitle: 'myTitle',
+
+  // or, if you need to display different fields
+  // for different content types
+  entryTitle: {
+    [contenTypeId]: 'mySpecialTitle'
+  }
+});
+```
+
+If you don't provide any (or fields by your strategy don't exist or don't have a value), the library will try to get `title` field first, and then `name`. There is no "smart" guessing strategy (like trying to list all fields with string value and get one with a short enough value), since it can easily introduce incosistency, and it will become confusing.
+
+## Advanced usage
+
+Create wizard instance initializes the library, attaching listeners to all elements with corresponding data-attributes to show tooltip on hovering. However, sometimes you change content on your page, and you would like to add tooltips for new content. In order to do that, you can invoke `.update` method on returned instance:
+
+> You can provide an arg for `update` method – it is an object with the same parameters as for `init`, so you can override any parameters you had set up before
+
+```js
+const wizard = CTFLWizard.init({
+  spaceId: 's25qxvg',
+  key: 'f78aw812mlswwasw'
+});
+
+// after some changes
+wizard.update({
+  // new entry title field resolution
+  entryTitle: 'newTitle'
+});
+```
+
+Another use case is to remove all listeners completely – for example, you re-rendered everything, or contentful content became irrelevant. In order to do that, you can call `.destroy` method:
+
+```js
+const wizard = CTFLWizard.init({
+  spaceId: 's25qxvg',
+  key: 'f78aw812mlswwasw'
+});
+
+// if you want to remove all contentful-wizard functionality
+wizard.destroy();
 ```
 
 ## Usage
