@@ -1,6 +1,6 @@
 import { fetch, IEntity } from "./fetch";
 import { clients } from "./init";
-import { contentTypes, entries } from "./state";
+import { getContentTypeNodes, getCTEntryNodes } from "./state";
 import { animate, renderOverlay, applyStyle, createElement } from "./utils";
 import {
   onHover,
@@ -105,14 +105,23 @@ function fetchContent({
   const client = clients[spaceId];
   const cleanupFns: Function[] = [];
   const promise = fetch({ client, contentType, entry }).then(
-    ({ contentTypesData }) => {
+    ({ contentTypesData, entriesData }) => {
       if (!closed) {
         const container = document.createElement("div");
-        const { node: ctsContainer, cleanup } = renderContentTypes({
+        const { node: ctsContainer, cleanup: ctsCleanup } = renderContentTypes({
           contentTypesData,
           spaceId
         });
-        cleanupFns.push(cleanup);
+        const {
+          node: entriesContainer,
+          cleanup: entriesCleanup
+        } = renderEntries({
+          contentTypesData,
+          contentType,
+          spaceId,
+          entriesData
+        });
+        cleanupFns.push(ctsCleanup, entriesCleanup);
 
         const spaceURL = constructSpaceURL({ spaceId });
         const contentTypeURL = constructContentTypeURL({
@@ -132,6 +141,7 @@ function fetchContent({
         container.appendChild(entryLink);
 
         container.appendChild(ctsContainer);
+        container.appendChild(entriesContainer);
 
         return container;
       }
@@ -190,8 +200,9 @@ function renderContentTypes({
   ctsContainer.appendChild(line);
   ctsContainer.appendChild(header);
   const cleanupFns: Function[] = [];
-  Object.keys(contentTypes)
-    .map(key => ({ nodes: contentTypes[key], data: contentTypesData[key] }))
+  const contentTypeNodes = getContentTypeNodes();
+  Object.keys(contentTypeNodes)
+    .map(key => ({ nodes: contentTypeNodes[key], data: contentTypesData[key] }))
     .forEach(({ nodes = [], data }: { data: IEntity; nodes: any[] }) => {
       const element = document.createElement("div");
       const link = constructContentTypeURL({
@@ -206,6 +217,103 @@ function renderContentTypes({
           target: "_blank"
         },
         text: data.name || "No name property!",
+        style: {
+          display: "inline-block",
+          borderBottom: "1px dashed #ccc",
+          paddingBottom: "2px",
+          marginBottom: "5px"
+        }
+      });
+
+      let overlays: Function[] = [];
+
+      const cleanup = onHover({
+        node: linkNode,
+        onMouseEnter: () => {
+          nodes.forEach(node => {
+            overlays.push(renderOverlay({ node }));
+          });
+        },
+        onMouseLeave: cleanOverlays
+      });
+
+      cleanupFns.push(() => {
+        cleanOverlays();
+        cleanup();
+      });
+
+      element.appendChild(linkNode);
+      ctsContainer.appendChild(element);
+
+      function cleanOverlays() {
+        overlays.forEach(fn => fn());
+        overlays = [];
+      }
+    });
+
+  return {
+    node: ctsContainer,
+    cleanup: () => {
+      cleanupFns.forEach(fn => fn());
+    }
+  };
+}
+
+function renderEntries({
+  contentTypesData,
+  entriesData,
+  spaceId,
+  contentType
+}: {
+  contentTypesData: { [key: string]: any };
+  entriesData: { [key: string]: any };
+  spaceId: string;
+  contentType: string;
+}) {
+  const contentTypeData = contentTypesData[contentType];
+  const ctsContainer = document.createElement("div");
+  const line = createElement({
+    style: {
+      height: "1px",
+      margin: "10px 0",
+      background: "#ccc"
+    }
+  });
+  const header = createElement({
+    tag: "h3",
+    text: `${contentTypeData.name} entries:`,
+    style: {
+      marginTop: "0",
+      marginBottom: "10px"
+    }
+  });
+
+  ctsContainer.appendChild(line);
+  ctsContainer.appendChild(header);
+  const cleanupFns: Function[] = [];
+
+  const entries = getCTEntryNodes({ contentType });
+
+  Object.keys(entries)
+    .map(entryId => ({
+      entry: entryId,
+      nodes: entries[entryId],
+      data: entriesData[entryId]
+    }))
+    .forEach(({ entry, nodes }) => {
+      const element = document.createElement("div");
+      const link = constructEntryURL({
+        spaceId,
+        entry
+      });
+
+      const linkNode = createElement({
+        tag: "a",
+        attrs: {
+          href: link,
+          target: "_blank"
+        },
+        text: entry,
         style: {
           display: "inline-block",
           borderBottom: "1px dashed #ccc",

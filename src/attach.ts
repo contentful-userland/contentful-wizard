@@ -1,4 +1,9 @@
-import { contentTypes, entries } from "./state";
+import {
+  setContentTypeNode,
+  removeContentTypeNode,
+  setEntryNode,
+  removeEntryNode
+} from "./state";
 import { showPopup } from "./popup";
 import { onHover } from "./utils";
 
@@ -10,15 +15,12 @@ export interface IAttachConfig {
 }
 
 export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
-  if (!contentTypes[contentType]) {
-    contentTypes[contentType] = [];
-  }
-
-  if (!entries[entry]) {
-    entries[entry] = [];
-  }
-  contentTypes[contentType].push(node);
-  entries[entry].push(node);
+  setContentTypeNode({ contentType, node });
+  setEntryNode({
+    contentType,
+    entry,
+    node
+  });
   let destroyPopup: Function | null;
   let popupNode: HTMLElement | null;
 
@@ -61,12 +63,8 @@ export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
   }
 
   function cleanup() {
-    contentTypes[contentType] = contentTypes[contentType].filter(
-      (nodeForCT: HTMLElement) => nodeForCT !== node
-    );
-    entries[entry] = entries[entry].filter(
-      (nodeForEntry: HTMLElement) => nodeForEntry !== node
-    );
+    removeContentTypeNode({ contentType, node });
+    removeEntryNode({ contentType, node, entry });
     destroyPopup && destroyPopup();
     cleanHover && cleanHover();
   }
