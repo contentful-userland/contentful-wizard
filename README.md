@@ -1,5 +1,7 @@
 # Contentful-wizard
 
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 This is a library to add interactive content explorer to your contentful-powered project.
 
 It allows your editors quickly understand which element on the page is responsible for specific entry and content type.
