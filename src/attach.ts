@@ -6,15 +6,23 @@ import {
 } from "./state";
 import { showPopup } from "./popup";
 import { onHover } from "./utils";
+import { IEntryTitle } from "./types";
 
 export interface IAttachConfig {
   node: HTMLElement;
   contentType: string;
   entry: string;
   spaceId: string;
+  entryTitle?: IEntryTitle;
 }
 
-export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
+export function attach({
+  node,
+  contentType,
+  entry,
+  spaceId,
+  entryTitle
+}: IAttachConfig) {
   setContentTypeNode({ contentType, node });
   setEntryNode({
     contentType,
@@ -40,7 +48,8 @@ export function attach({ node, contentType, entry, spaceId }: IAttachConfig) {
       spaceId,
       entry,
       contentType,
-      cleanup: internalMouseLeave
+      cleanup: internalMouseLeave,
+      entryTitle
     });
     destroyPopup = popupData.destroy;
     popupNode = popupData.node;

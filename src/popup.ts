@@ -1,7 +1,14 @@
 import { fetch, IEntity } from "./fetch";
 import { clients } from "./init";
 import { getContentTypeNodes, getCTEntryNodes } from "./state";
-import { animate, renderOverlay, applyStyle, createElement } from "./utils";
+import {
+  animate,
+  renderOverlay,
+  applyStyle,
+  createElement,
+  getEntryTitle
+} from "./utils";
+import { IEntryTitle } from "./types";
 import {
   onHover,
   constructSpaceURL,
@@ -15,13 +22,15 @@ export function showPopup({
   spaceId,
   contentType,
   entry,
-  cleanup
+  cleanup,
+  entryTitle
 }: {
   node: HTMLElement;
   spaceId: string;
   contentType: string;
   entry: string;
   cleanup: Function;
+  entryTitle?: IEntryTitle;
 }) {
   const { top, left, right } = node.getBoundingClientRect();
   const offsetY = window.pageYOffset;
@@ -46,7 +55,8 @@ export function showPopup({
   const { promise, cleanup: cleanupContent } = fetchContent({
     spaceId,
     contentType,
-    entry
+    entry,
+    entryTitle
   });
 
   promise.then(content => {
@@ -95,11 +105,13 @@ export function showPopup({
 function fetchContent({
   spaceId,
   contentType,
-  entry
+  entry,
+  entryTitle
 }: {
   spaceId: string;
   contentType: string;
   entry: string;
+  entryTitle?: IEntryTitle;
 }) {
   let closed = false;
   const client = clients[spaceId];
@@ -119,7 +131,8 @@ function fetchContent({
           contentTypesData,
           contentType,
           spaceId,
-          entriesData
+          entriesData,
+          entryTitle
         });
         cleanupFns.push(ctsCleanup, entriesCleanup);
 
@@ -259,16 +272,54 @@ function renderContentTypes({
   };
 }
 
+function renderEntriesByCt({
+  contentType,
+  contentTypesData,
+  entriesData,
+  spaceId
+}: {
+  contentType: string;
+  contentTypesData: { [key: string]: any };
+  entriesData: { [key: string]: any };
+  spaceId: string;
+}) {
+  const container = createElement();
+  const cleanupFns: Function[] = [];
+  const filteredCTs = Object.keys(getContentTypeNodes()).filter(
+    contentTypeAtPage => contentTypeAtPage !== contentType
+  );
+  [contentType].concat(filteredCTs).forEach(contentTypeAtPage => {
+    const { node, cleanup } = renderEntries({
+      contentType: contentTypeAtPage,
+      contentTypesData,
+      entriesData,
+      spaceId
+    });
+
+    container.appendChild(node);
+    cleanupFns.push(cleanup);
+  });
+
+  return {
+    node: container,
+    cleanup: () => {
+      cleanupFns.forEach(fn => fn());
+    }
+  };
+}
+
 function renderEntries({
   contentTypesData,
   entriesData,
   spaceId,
-  contentType
+  contentType,
+  entryTitle
 }: {
   contentTypesData: { [key: string]: any };
   entriesData: { [key: string]: any };
   spaceId: string;
   contentType: string;
+  entryTitle?: IEntryTitle;
 }) {
   const contentTypeData = contentTypesData[contentType];
   const ctsContainer = document.createElement("div");
@@ -300,7 +351,7 @@ function renderEntries({
       nodes: entries[entryId],
       data: entriesData[entryId]
     }))
-    .forEach(({ entry, nodes }) => {
+    .forEach(({ entry, nodes, data }) => {
       const element = document.createElement("div");
       const link = constructEntryURL({
         spaceId,
@@ -313,7 +364,7 @@ function renderEntries({
           href: link,
           target: "_blank"
         },
-        text: entry,
+        text: getEntryTitle({ entry: data, entryTitle }),
         style: {
           display: "inline-block",
           borderBottom: "1px dashed #ccc",

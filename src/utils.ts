@@ -1,3 +1,6 @@
+import { IEntryTitle } from "./types";
+import { IEntity } from "./fetch";
+
 const appPrefix = "https://app.contentful.com";
 
 export function constructSpaceURL({ spaceId }: { spaceId: string }) {
@@ -137,17 +140,29 @@ export function applyStyle({
   Object.assign(node.style, style);
 }
 
-export function createElement({
-  tag = "div",
-  text,
-  style,
-  attrs
-}: {
-  tag?: "div" | "img" | "a" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span";
-  text?: string;
-  style?: { [key: string]: string };
-  attrs?: { [key: string]: string };
-}): HTMLElement {
+export function createElement(
+  {
+    tag = "div",
+    text,
+    style,
+    attrs
+  }: {
+    tag?:
+      | "div"
+      | "img"
+      | "a"
+      | "h1"
+      | "h2"
+      | "h3"
+      | "h4"
+      | "h5"
+      | "h6"
+      | "span";
+    text?: string;
+    style?: { [key: string]: string };
+    attrs?: { [key: string]: string };
+  } = {}
+): HTMLElement {
   const element = document.createElement(tag);
   if (text) {
     element.innerHTML = text;
@@ -169,4 +184,37 @@ export function createElement({
   }
 
   return element;
+}
+
+export function getEntryTitle({
+  entry,
+  entryTitle
+}: {
+  entry: any;
+  entryTitle?: IEntryTitle;
+}) {
+  const field = getEntryTitleField({ entry, entryTitle });
+  let value;
+
+  [field, "title", "name"].filter(Boolean).some((property: string) => {
+    value = entry.fields[property];
+
+    return Boolean(value);
+  });
+
+  return value || entry.sys.id;
+}
+
+function getEntryTitleField({
+  entry,
+  entryTitle
+}: {
+  entry: any;
+  entryTitle?: IEntryTitle;
+}) {
+  if (typeof entryTitle === "string") {
+    return entryTitle;
+  } else if (typeof entryTitle === "object") {
+    return entryTitle[entry.sys.contentType.id];
+  }
 }
