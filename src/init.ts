@@ -30,7 +30,7 @@ export function init({
       cleanup && cleanup();
       cleanup = attachHandlers({ spaceId, entryTitle });
     },
-    remove: () => {
+    destroy: () => {
       cleanup && cleanup();
       cleanup = null;
     }
