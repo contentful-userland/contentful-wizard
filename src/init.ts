@@ -7,10 +7,12 @@ export const clients: { [key: string]: ContentfulClientApi } = {};
 export function init({
   key,
   spaceId,
+  preview,
   entryTitle
 }: {
   key: string;
   spaceId: string;
+  preview?: boolean;
   entryTitle?: IEntryTitle;
 }) {
   clients[spaceId] = createClient({
@@ -19,7 +21,8 @@ export function init({
     // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
     accessToken: key,
     // no additional requests
-    resolveLinks: false
+    resolveLinks: false,
+    host: preview ? "preview.contentful.com" : undefined
   });
 
   let cleanup: Function | null = attachHandlers({ spaceId, entryTitle });
