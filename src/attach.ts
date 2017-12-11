@@ -14,6 +14,7 @@ export interface IAttachConfig {
   entry: string;
   spaceId: string;
   entryTitle?: IEntryTitle;
+  description?: string;
 }
 
 export function attach({
@@ -21,7 +22,8 @@ export function attach({
   contentType,
   entry,
   spaceId,
-  entryTitle
+  entryTitle,
+  description
 }: IAttachConfig) {
   setContentTypeNode({ contentType, node });
   setEntryNode({
@@ -49,7 +51,8 @@ export function attach({
       entry,
       contentType,
       cleanup: internalMouseLeave,
-      entryTitle
+      entryTitle,
+      description
     });
     destroyPopup = popupData.destroy;
     popupNode = popupData.node;

@@ -54,12 +54,14 @@ function attachHandlers({
   Array.prototype.forEach.call(allElements, (el: HTMLElement) => {
     const contentType = el.getAttribute("data-ctfl-content-type");
     const entry = el.getAttribute("data-ctfl-entry");
+    const description = el.getAttribute("data-ctfl-description");
     const cleanup = attach({
       entryTitle,
       node: el,
       spaceId,
       contentType,
-      entry
+      entry,
+      description
     } as IAttachConfig);
 
     cleanupFns.push(cleanup);

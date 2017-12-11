@@ -14,12 +14,14 @@ export function fetchContent({
   spaceId,
   contentType,
   entry,
-  entryTitle
+  entryTitle,
+  description
 }: {
   spaceId: string;
   contentType: string;
   entry: string;
   entryTitle?: IEntryTitle;
+  description?: string;
 }) {
   let closed = false;
   const client = clients[spaceId];
@@ -45,6 +47,9 @@ export function fetchContent({
         cleanupFns.push(ctsCleanup, entriesCleanup);
 
         const spaceURL = constructSpaceURL({ spaceId });
+        const descriptionNode = createElement({
+          text: description
+        });
         const contentTypeURL = constructContentTypeURL({
           spaceId,
           contentType
@@ -57,6 +62,7 @@ export function fetchContent({
         });
         const entryLink = renderLink({ href: entryURL, text: "Link to entry" });
 
+        container.appendChild(descriptionNode);
         container.appendChild(spaceLink);
         container.appendChild(ctLink);
         container.appendChild(entryLink);

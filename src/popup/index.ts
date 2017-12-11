@@ -8,7 +8,8 @@ export function showPopup({
   contentType,
   entry,
   cleanup,
-  entryTitle
+  entryTitle,
+  description
 }: {
   node: HTMLElement;
   spaceId: string;
@@ -16,6 +17,7 @@ export function showPopup({
   entry: string;
   cleanup: Function;
   entryTitle?: IEntryTitle;
+  description?: string;
 }) {
   const { top, left, right } = node.getBoundingClientRect();
   const offsetY = window.pageYOffset;
@@ -34,14 +36,19 @@ export function showPopup({
       borderRadius: "5px",
       opacity: "0"
     },
-    text: "loading..."
+    text: `
+      <div>
+        ${description}
+      </div>
+      loading...`
   });
 
   const { promise, cleanup: cleanupContent } = fetchContent({
     spaceId,
     contentType,
     entry,
-    entryTitle
+    entryTitle,
+    description
   });
 
   promise.then(content => {
