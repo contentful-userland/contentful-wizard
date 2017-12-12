@@ -45,6 +45,7 @@ export function attach({
 
   function onMouseEnter() {
     node.style.border = "2px solid red";
+    destroyPopup && destroyPopup();
     const popupData = showPopup({
       node,
       spaceId,
