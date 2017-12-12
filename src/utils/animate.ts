@@ -22,7 +22,7 @@ export function animate({
   return new Promise(async resolve => {
     const period = (stop - start) / steps;
 
-    for (let i = 0; i < steps; i++) {
+    for (let i = 1; i <= steps; i++) {
       node.style[property] = String(start + period * i);
       await sleep(time / steps);
     }
