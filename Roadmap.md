@@ -10,9 +10,10 @@ There are no explicit priorities here, and some items can be thrown away, and so
   - specific styles for content-types
 - improve tooltip:
   - add "nose", so it looks better
+  - automatic rearrangement according to the screen's position
   - automatically detect at which side it is better to render tooltip
 - list of CTs/entries/assets:
-  - fold
+  - fold more than 5 elements
 - add locale support
 
 - add field link to the popup
