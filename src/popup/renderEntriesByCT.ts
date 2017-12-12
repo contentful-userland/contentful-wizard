@@ -1,17 +1,20 @@
 import { createElement } from "../utils";
 import { getContentTypeNodes } from "../state";
 import { renderEntries } from "./renderEntries";
+import { IEntryTitle } from "../types";
 
 export function renderEntriesByCt({
   contentType,
   contentTypesData,
   entriesData,
-  spaceId
+  spaceId,
+  entryTitle
 }: {
   contentType: string;
   contentTypesData: { [key: string]: any };
   entriesData: { [key: string]: any };
   spaceId: string;
+  entryTitle?: IEntryTitle;
 }) {
   const container = createElement();
   const cleanupFns: Function[] = [];
@@ -23,7 +26,8 @@ export function renderEntriesByCt({
       contentType: contentTypeAtPage,
       contentTypesData,
       entriesData,
-      spaceId
+      spaceId,
+      entryTitle
     });
 
     container.appendChild(node);

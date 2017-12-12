@@ -1,6 +1,6 @@
 import { renderContentTypes } from "./renderContentTypes";
 import { createElement } from "../utils";
-import { renderEntries } from "./renderEntries";
+import { renderEntriesByCt } from "./renderEntriesByCt";
 import { fetch, IEntity } from "../fetch";
 import {
   constructSpaceURL,
@@ -37,7 +37,7 @@ export function fetchContent({
         const {
           node: entriesContainer,
           cleanup: entriesCleanup
-        } = renderEntries({
+        } = renderEntriesByCt({
           contentTypesData,
           contentType,
           spaceId,
