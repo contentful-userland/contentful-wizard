@@ -31,7 +31,7 @@ export function showPopup({
       maxWidth: "350px",
       padding: "15px",
       left: `${right - 5}px`,
-      top: `${offsetY + top + 30}px`,
+      top: `${offsetY + top + 15}px`,
       border: "2px solid #ccc",
       borderRadius: "5px",
       opacity: "0"

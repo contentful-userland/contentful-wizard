@@ -34,7 +34,7 @@ export function attach({
   let destroyPopup: Function | null;
   let popupNode: HTMLElement | null;
 
-  node.style.border = "3px dashed red";
+  node.style.border = "2px dashed red";
   // 1. add style to indicate that you can hover
   // 2. show tooltip on hover
   const cleanHover = onHover({
@@ -44,7 +44,7 @@ export function attach({
   });
 
   function onMouseEnter() {
-    node.style.border = "3px solid red";
+    node.style.border = "2px solid red";
     const popupData = showPopup({
       node,
       spaceId,
@@ -71,7 +71,7 @@ export function attach({
   function internalMouseLeave() {
     destroyPopup && destroyPopup();
     destroyPopup = null;
-    node.style.border = "3px dashed red";
+    node.style.border = "2px dashed red";
   }
 
   function cleanup() {
