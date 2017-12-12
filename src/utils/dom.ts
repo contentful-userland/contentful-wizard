@@ -13,8 +13,8 @@ export function renderOverlay({ node }: { node: HTMLElement }) {
       position: "absolute",
       opacity: "0",
       boxSizing: "border-box",
-      // let's hope we override everything
-      zIndex: "999",
+      // let's hope we override everything, except the tooltip
+      zIndex: "998",
       background: "red",
       top: `${offsetY + top}px`,
       height: `${bottom - top}px`,
