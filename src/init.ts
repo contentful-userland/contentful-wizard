@@ -30,8 +30,6 @@ export function init({
 
   const mergedStyle = mergeStyle(style);
 
-  console.log(mergedStyle);
-
   let cleanup: Function | null = attachHandlers({
     spaceId,
     entryTitle,
