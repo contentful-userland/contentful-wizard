@@ -1,4 +1,4 @@
-import { createClient, ContentfulClientApi } from "contentful";
+import { ContentfulClientApi, createClient } from "contentful";
 import { attach, IAttachConfig } from "./attach";
 import { IEntryTitle, IStyles } from "./types";
 import { mergeStyle } from "./utils";

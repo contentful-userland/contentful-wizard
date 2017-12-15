@@ -1,14 +1,14 @@
-import { renderContentTypes } from "./renderContentTypes";
-import { createElement } from "../utils";
-import { renderEntriesByCt } from "./renderEntriesByCt";
 import { fetch, IEntity } from "../fetch";
-import {
-  constructSpaceURL,
-  constructContentTypeURL,
-  constructEntryURL
-} from "../utils";
 import { clients } from "../init";
 import { IEntryTitle, IStyles } from "../types";
+import { createElement } from "../utils";
+import {
+  constructContentTypeURL,
+  constructEntryURL,
+  constructSpaceURL
+} from "../utils";
+import { renderContentTypes } from "./renderContentTypes";
+import { renderEntriesByCt } from "./renderEntriesByCt";
 
 export function fetchContent({
   spaceId,
@@ -41,11 +41,11 @@ export function fetchContent({
           node: entriesContainer,
           cleanup: entriesCleanup
         } = renderEntriesByCt({
-          contentTypesData,
           contentType,
-          spaceId,
+          contentTypesData,
           entriesData,
           entryTitle,
+          spaceId,
           style
         });
         cleanupFns.push(ctsCleanup, entriesCleanup);
@@ -55,8 +55,8 @@ export function fetchContent({
           text: description
         });
         const contentTypeURL = constructContentTypeURL({
-          spaceId,
-          contentType
+          contentType,
+          spaceId
         });
         const entryURL = constructEntryURL({ spaceId, entry });
         const spaceLink = renderLink({ href: spaceURL, text: "Link to space" });

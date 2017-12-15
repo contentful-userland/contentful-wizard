@@ -24,6 +24,7 @@
     "build:umd:min": "cross-env NODE_ENV=production webpack",
     "build:dist": "npm run build:umd && npm run build:umd:min",
     "build": "npm run build:es2015 && npm run build:commonjs && npm run build:dist",
+    "lint": "tslint src/**/*.ts",
     "test": "jest"
   },
   "lint-staged": {
@@ -59,6 +60,8 @@
     "lint-staged": "^6.0.0",
     "prettier": "1.9.1",
     "rimraf": "^2.6.2",
+    "tslint": "^5.8.0",
+    "tslint-config-prettier": "^1.6.0",
     "typescript": "^2.6.2"
   }
 }

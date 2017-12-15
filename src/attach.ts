@@ -1,12 +1,12 @@
-import {
-  setContentTypeNode,
-  removeContentTypeNode,
-  setEntryNode,
-  removeEntryNode
-} from "./state";
 import { showPopup } from "./popup";
-import { onHover, applyStyle } from "./utils";
+import {
+  removeContentTypeNode,
+  removeEntryNode,
+  setContentTypeNode,
+  setEntryNode
+} from "./state";
 import { IEntryTitle, IStyles } from "./types";
+import { applyStyle, onHover } from "./utils";
 
 export interface IAttachConfig {
   node: HTMLElement;

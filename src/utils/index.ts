@@ -1,10 +1,10 @@
-import { onHover } from "./events";
-import { renderOverlay, createElement, applyStyle } from "./dom";
 import { animate } from "./animate";
+import { applyStyle, createElement, renderOverlay } from "./dom";
+import { onHover } from "./events";
 import {
-  constructSpaceURL,
   constructContentTypeURL,
   constructEntryURL,
+  constructSpaceURL,
   getEntryTitle
 } from "./links";
 import { mergeStyle } from "./style";

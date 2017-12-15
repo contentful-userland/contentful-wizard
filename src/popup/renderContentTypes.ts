@@ -1,12 +1,12 @@
+import { IEntity } from "../fetch";
 import { getContentTypeNodes } from "../state";
+import { IStyles } from "../types";
 import {
-  createElement,
   constructContentTypeURL,
+  createElement,
   onHover,
   renderOverlay
 } from "../utils";
-import { IEntity } from "../fetch";
-import { IStyles } from "../types";
 
 export function renderContentTypes({
   contentTypesData,

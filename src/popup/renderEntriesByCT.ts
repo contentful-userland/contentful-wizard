@@ -1,7 +1,7 @@
-import { createElement } from "../utils";
 import { getContentTypeNodes } from "../state";
-import { renderEntries } from "./renderEntries";
 import { IEntryTitle, IStyles } from "../types";
+import { createElement } from "../utils";
+import { renderEntries } from "./renderEntries";
 
 export function renderEntriesByCt({
   contentType,

@@ -10,7 +10,8 @@ export interface IEntity {
 const contentTypesData: { [key: string]: IEntity } = {};
 const entriesData: { [key: string]: IEntity } = {};
 
-let contentTypesPromise: Promise<any>, entriesPromise: Promise<any>;
+let contentTypesPromise: Promise<any>;
+let entriesPromise: Promise<any>;
 
 export function fetch({
   client,

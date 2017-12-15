@@ -1,6 +1,6 @@
-import { createElement, animate, onHover, applyStyle } from "../utils";
-import { fetchContent } from "./fetch";
 import { IEntryTitle, IStyles } from "../types";
+import { animate, applyStyle, createElement, onHover } from "../utils";
+import { fetchContent } from "./fetch";
 
 export function showPopup({
   node,
@@ -83,6 +83,7 @@ export function showPopup({
         cleanupHover();
         document.body.removeChild(tooltip);
       } catch (e) {
+        // tslint:disable-next-line no-console
         console.log("error during removing tooltip::", e);
       }
     }

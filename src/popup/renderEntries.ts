@@ -1,12 +1,12 @@
+import { getCTEntryNodes } from "../state";
+import { IEntryTitle, IStyles } from "../types";
 import {
-  createElement,
   constructEntryURL,
+  createElement,
   getEntryTitle,
   onHover,
   renderOverlay
 } from "../utils";
-import { getCTEntryNodes } from "../state";
-import { IEntryTitle, IStyles } from "../types";
 
 export function renderEntries({
   contentTypesData,

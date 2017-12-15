@@ -1,5 +1,5 @@
-import { IEntryTitle, IStyle } from "../types";
 import { IEntity } from "../fetch";
+import { IEntryTitle, IStyle } from "../types";
 import { animate } from "./animate";
 
 export function renderOverlay({
@@ -40,6 +40,7 @@ export function renderOverlay({
       });
       document.body.removeChild(overlay);
     } catch (e) {
+      // tslint:disable-next-line no-console
       console.log("error during removing overlay::", e);
     }
   };
