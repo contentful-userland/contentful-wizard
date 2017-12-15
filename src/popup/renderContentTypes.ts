@@ -6,13 +6,16 @@ import {
   renderOverlay
 } from "../utils";
 import { IEntity } from "../fetch";
+import { IStyles } from "../types";
 
 export function renderContentTypes({
   contentTypesData,
-  spaceId
+  spaceId,
+  style
 }: {
   contentTypesData: { [key: string]: any };
   spaceId: string;
+  style: IStyles;
 }) {
   const ctsContainer = document.createElement("div");
   const line = createElement({
@@ -65,7 +68,7 @@ export function renderContentTypes({
         node: linkNode,
         onMouseEnter: () => {
           nodes.forEach(node => {
-            overlays.push(renderOverlay({ node }));
+            overlays.push(renderOverlay({ node, style: style.overlay }));
           });
         },
         onMouseLeave: cleanOverlays

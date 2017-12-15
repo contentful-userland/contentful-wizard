@@ -8,20 +8,22 @@ import {
   constructEntryURL
 } from "../utils";
 import { clients } from "../init";
-import { IEntryTitle } from "../types";
+import { IEntryTitle, IStyles } from "../types";
 
 export function fetchContent({
   spaceId,
   contentType,
   entry,
   entryTitle,
-  description
+  description,
+  style
 }: {
   spaceId: string;
   contentType: string;
   entry: string;
   entryTitle?: IEntryTitle;
   description?: string;
+  style: IStyles;
 }) {
   let closed = false;
   const client = clients[spaceId];
@@ -32,7 +34,8 @@ export function fetchContent({
         const container = document.createElement("div");
         const { node: ctsContainer, cleanup: ctsCleanup } = renderContentTypes({
           contentTypesData,
-          spaceId
+          spaceId,
+          style
         });
         const {
           node: entriesContainer,
@@ -42,7 +45,8 @@ export function fetchContent({
           contentType,
           spaceId,
           entriesData,
-          entryTitle
+          entryTitle,
+          style
         });
         cleanupFns.push(ctsCleanup, entriesCleanup);
 

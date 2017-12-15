@@ -1,6 +1,7 @@
 import { createClient, ContentfulClientApi } from "contentful";
 import { attach, IAttachConfig } from "./attach";
-import { IEntryTitle } from "./types";
+import { IEntryTitle, IStyles } from "./types";
+import { mergeStyle } from "./utils";
 
 export const clients: { [key: string]: ContentfulClientApi } = {};
 
@@ -8,12 +9,14 @@ export function init({
   key,
   spaceId,
   preview,
-  entryTitle
+  entryTitle,
+  style
 }: {
   key: string;
   spaceId: string;
   preview?: boolean;
   entryTitle?: IEntryTitle;
+  style?: IStyles;
 }) {
   clients[spaceId] = createClient({
     // This is the space ID. A space is like a project folder in Contentful terms
@@ -25,13 +28,21 @@ export function init({
     host: preview ? "preview.contentful.com" : undefined
   });
 
-  let cleanup: Function | null = attachHandlers({ spaceId, entryTitle });
+  const mergedStyle = mergeStyle(style);
+
+  console.log(mergedStyle);
+
+  let cleanup: Function | null = attachHandlers({
+    spaceId,
+    entryTitle,
+    style: mergedStyle
+  });
 
   return {
     // cleanup old tooltips and reattach everything once again
     update: () => {
       cleanup && cleanup();
-      cleanup = attachHandlers({ spaceId, entryTitle });
+      cleanup = attachHandlers({ spaceId, entryTitle, style: mergedStyle });
     },
     destroy: () => {
       cleanup && cleanup();
@@ -42,16 +53,18 @@ export function init({
 
 function attachHandlers({
   spaceId,
-  entryTitle
+  entryTitle,
+  style
 }: {
   spaceId: string;
   entryTitle?: IEntryTitle;
+  style: IStyles;
 }) {
-  const allElements = document.querySelectorAll("[data-ctfl-entry]");
+  const entryElements = document.querySelectorAll("[data-ctfl-entry]");
 
   const cleanupFns: Function[] = [];
 
-  Array.prototype.forEach.call(allElements, (el: HTMLElement) => {
+  Array.prototype.forEach.call(entryElements, (el: HTMLElement) => {
     const contentType = el.getAttribute("data-ctfl-content-type");
     const entry = el.getAttribute("data-ctfl-entry");
     const description = el.getAttribute("data-ctfl-description");
@@ -61,7 +74,8 @@ function attachHandlers({
       spaceId,
       contentType,
       entry,
-      description
+      description,
+      style
     } as IAttachConfig);
 
     cleanupFns.push(cleanup);

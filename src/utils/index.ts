@@ -7,6 +7,7 @@ import {
   constructEntryURL,
   getEntryTitle
 } from "./links";
+import { mergeStyle } from "./style";
 
 export {
   onHover,
@@ -17,5 +18,6 @@ export {
   constructSpaceURL,
   constructContentTypeURL,
   constructEntryURL,
-  getEntryTitle
+  getEntryTitle,
+  mergeStyle
 };

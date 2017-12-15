@@ -6,20 +6,22 @@ import {
   renderOverlay
 } from "../utils";
 import { getCTEntryNodes } from "../state";
-import { IEntryTitle } from "../types";
+import { IEntryTitle, IStyles } from "../types";
 
 export function renderEntries({
   contentTypesData,
   entriesData,
   spaceId,
   contentType,
-  entryTitle
+  entryTitle,
+  style
 }: {
   contentTypesData: { [key: string]: any };
   entriesData: { [key: string]: any };
   spaceId: string;
   contentType: string;
   entryTitle?: IEntryTitle;
+  style: IStyles;
 }) {
   const contentTypeData = contentTypesData[contentType];
   const ctsContainer = document.createElement("div");
@@ -79,7 +81,7 @@ export function renderEntries({
         node: linkNode,
         onMouseEnter: () => {
           nodes.forEach(node => {
-            overlays.push(renderOverlay({ node }));
+            overlays.push(renderOverlay({ node, style: style.overlay }));
           });
         },
         onMouseLeave: cleanOverlays

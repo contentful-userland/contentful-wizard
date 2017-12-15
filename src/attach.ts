@@ -5,8 +5,8 @@ import {
   removeEntryNode
 } from "./state";
 import { showPopup } from "./popup";
-import { onHover } from "./utils";
-import { IEntryTitle } from "./types";
+import { onHover, applyStyle } from "./utils";
+import { IEntryTitle, IStyles } from "./types";
 
 export interface IAttachConfig {
   node: HTMLElement;
@@ -15,6 +15,7 @@ export interface IAttachConfig {
   spaceId: string;
   entryTitle?: IEntryTitle;
   description?: string;
+  style: IStyles;
 }
 
 export function attach({
@@ -23,7 +24,8 @@ export function attach({
   entry,
   spaceId,
   entryTitle,
-  description
+  description,
+  style
 }: IAttachConfig) {
   setContentTypeNode({ contentType, node });
   setEntryNode({
@@ -34,7 +36,10 @@ export function attach({
   let destroyPopup: Function | null;
   let popupNode: HTMLElement | null;
 
-  node.style.border = "2px dashed red";
+  applyStyle({
+    node,
+    style: style.highlight
+  });
   // 1. add style to indicate that you can hover
   // 2. show tooltip on hover
   const cleanHover = onHover({
@@ -44,7 +49,10 @@ export function attach({
   });
 
   function onMouseEnter() {
-    node.style.border = "2px solid red";
+    applyStyle({
+      node,
+      style: style.highlightHover
+    });
     destroyPopup && destroyPopup();
     const popupData = showPopup({
       node,
@@ -53,7 +61,8 @@ export function attach({
       contentType,
       cleanup: internalMouseLeave,
       entryTitle,
-      description
+      description,
+      style
     });
     destroyPopup = popupData.destroy;
     popupNode = popupData.node;
@@ -72,7 +81,10 @@ export function attach({
   function internalMouseLeave() {
     destroyPopup && destroyPopup();
     destroyPopup = null;
-    node.style.border = "2px dashed red";
+    applyStyle({
+      node,
+      style: style.highlight
+    });
   }
 
   function cleanup() {

@@ -1,6 +1,6 @@
-import { createElement, animate, onHover } from "../utils";
+import { createElement, animate, onHover, applyStyle } from "../utils";
 import { fetchContent } from "./fetch";
-import { IEntryTitle } from "../types";
+import { IEntryTitle, IStyles } from "../types";
 
 export function showPopup({
   node,
@@ -9,7 +9,8 @@ export function showPopup({
   entry,
   cleanup,
   entryTitle,
-  description
+  description,
+  style
 }: {
   node: HTMLElement;
   spaceId: string;
@@ -18,24 +19,16 @@ export function showPopup({
   cleanup: Function;
   entryTitle?: IEntryTitle;
   description?: string;
+  style: IStyles;
 }) {
   const { top, left, right } = node.getBoundingClientRect();
   const offsetY = window.pageYOffset;
 
   const tooltip: HTMLElement = createElement({
-    style: {
-      position: "absolute",
-      background: "#fff",
-      zIndex: "999",
-      minWidth: "150px",
-      maxWidth: "350px",
-      padding: "15px",
+    style: Object.assign({}, style.tooltip, {
       left: `${right - 5}px`,
-      top: `${offsetY + top + 15}px`,
-      border: "2px solid #ccc",
-      borderRadius: "5px",
-      opacity: "0"
-    },
+      top: `${offsetY + top + 15}px`
+    }),
     text: `
       <div>
         ${description}
@@ -48,12 +41,14 @@ export function showPopup({
     contentType,
     entry,
     entryTitle,
-    description
+    description,
+    style
   });
 
   promise.then(content => {
     if (content) {
       tooltip.innerHTML = "";
+      // we need to calculate height somehow
       tooltip.appendChild(content);
     }
   });

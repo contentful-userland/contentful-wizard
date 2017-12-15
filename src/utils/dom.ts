@@ -1,26 +1,26 @@
-import { IEntryTitle } from "../types";
+import { IEntryTitle, IStyle } from "../types";
 import { IEntity } from "../fetch";
 import { animate } from "./animate";
 
-export function renderOverlay({ node }: { node: HTMLElement }) {
+export function renderOverlay({
+  node,
+  style
+}: {
+  node: HTMLElement;
+  style?: IStyle;
+}) {
   const { bottom, top, left, right } = node.getBoundingClientRect();
 
   const offsetY = window.pageYOffset;
   const offsetX = window.pageXOffset;
 
   const overlay = createElement({
-    style: {
-      position: "absolute",
-      opacity: "0",
-      boxSizing: "border-box",
-      // let's hope we override everything, except the tooltip
-      zIndex: "998",
-      background: "red",
+    style: Object.assign({}, style, {
       top: `${offsetY + top}px`,
       height: `${bottom - top}px`,
       left: `${offsetX + left}px`,
       width: `${right - left}px`
-    }
+    })
   });
 
   document.body.appendChild(overlay);
@@ -50,7 +50,7 @@ export function applyStyle({
   style
 }: {
   node: HTMLElement;
-  style: { [key: string]: string };
+  style?: { [key: string]: string } | IStyle;
 }): void {
   Object.assign(node.style, style);
 }
@@ -100,3 +100,7 @@ export function createElement(
 
   return element;
 }
+
+// export function measure(node: HTMLElement) {
+
+// }
