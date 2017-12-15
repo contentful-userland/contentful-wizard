@@ -49,6 +49,39 @@ CTFLWizard.init({
 
 If you don't provide any (or fields by your strategy don't exist or don't have a value), the library will try to get `title` field first, and then `name`. There is no "smart" guessing strategy (like trying to list all fields with string value and get one with a short enough value), since it can easily introduce incosistency, and it will become confusing.
 
+## Styling
+
+Your use-case might be different – for example, you need wide tooltips, or default colours don't match your schema; you can customize all default styles, except positioning, it is calculated automatically and adjusted to the content. You provide your own styling during calling `CTFLWizard.init`, and you can omit any of these properties, and the whole property is optional – below you can find a commented breakdown on all style options:
+
+> Since it is in pre-alpha (read: super-early) and styles are subject to change, I don't want to share styles to avoid frequent updates. Once it stabilizies, all default styles will be shown in this snippet
+
+```js
+CTFLWizard.init({
+  spaceId: 's25qxvg',
+  key: 'f78aw812mlswwasw', // your API key
+  
+  // the whole property is optional
+  style: {
+    // style of the container to indicate
+    // that it has hover capabilities
+    highlight: {
+      border: '2px dashed #ccc'
+    },
+    // style during the hover
+    highlightHover: {
+      border: '2px solid #ccc'
+    },
+    // styles of the tooltip itself
+    tooltip: {
+      background: '#ccc'
+    },
+    overlay: {
+      background: 'green'
+    }
+  }
+});
+```
+
 ## Advanced usage
 
 Create wizard instance initializes the library, attaching listeners to all elements with corresponding data-attributes to show tooltip on hovering. However, sometimes you change content on your page, and you would like to add tooltips for new content. In order to do that, you can invoke `.update` method on returned instance:
