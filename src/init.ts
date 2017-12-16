@@ -2,6 +2,7 @@ import { ContentfulClientApi, createClient } from "contentful";
 import { attach, IAttachConfig } from "./attach";
 import { IEntryTitle, IStyles } from "./types";
 import { isBrowser, mergeStyle } from "./utils";
+import { setStyle } from "./state";
 
 export const clients: { [key: string]: ContentfulClientApi } = {};
 
@@ -38,6 +39,8 @@ export function init({
   });
 
   const mergedStyle = mergeStyle(style);
+
+  setStyle({ spaceId, style: mergedStyle });
 
   let cleanup: Function | null = attachHandlers({
     spaceId,

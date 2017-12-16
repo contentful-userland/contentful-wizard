@@ -1,5 +1,6 @@
 import { showPopup } from "./popup";
 import {
+  getStyle,
   removeAssetNode,
   removeContentTypeNode,
   removeEntryNode,
@@ -8,7 +9,13 @@ import {
   setEntryNode
 } from "./state";
 import { IEntryTitle, IStyles } from "./types";
-import { applyStyle, containsNode, isBrowser, onHover } from "./utils";
+import {
+  applyStyle,
+  containsNode,
+  isBrowser,
+  mergeStyle,
+  onHover
+} from "./utils";
 
 export interface IAttachConfig {
   node: HTMLElement;
@@ -28,7 +35,7 @@ export function attach({
   spaceId,
   entryTitle,
   description,
-  style,
+  style: rawStyle = getStyle({ spaceId }),
   asset
 }: IAttachConfig) {
   if (!isBrowser()) {
@@ -54,6 +61,9 @@ export function attach({
       node
     });
   }
+
+  const style =
+    rawStyle === getStyle({ spaceId }) ? rawStyle : mergeStyle(rawStyle);
 
   let destroyPopup: Function | null;
   let popupNode: HTMLElement;

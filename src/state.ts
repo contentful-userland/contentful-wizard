@@ -1,3 +1,5 @@
+import { IStyles } from "./types";
+
 export interface IContentTypeNodes {
   [key: string]: HTMLElement[];
 }
@@ -15,6 +17,22 @@ export interface IAssetNodes {
 const contentTypeNodes: IContentTypeNodes = {};
 const entryNodes: IEntryNodes = {};
 const assetNodes: IAssetNodes = {};
+
+const styles: { [key: string]: IStyles } = {};
+
+export function setStyle({
+  spaceId,
+  style
+}: {
+  spaceId: string;
+  style: IStyles;
+}) {
+  styles[spaceId] = style;
+}
+
+export function getStyle({ spaceId }: { spaceId: string }) {
+  return styles[spaceId];
+}
 
 export function getAssetsNodes(): IAssetNodes {
   return assetNodes;
