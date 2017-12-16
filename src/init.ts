@@ -1,7 +1,7 @@
 import { ContentfulClientApi, createClient } from "contentful";
 import { attach, IAttachConfig } from "./attach";
 import { IEntryTitle, IStyles } from "./types";
-import { mergeStyle } from "./utils";
+import { isBrowser, mergeStyle } from "./utils";
 
 export const clients: { [key: string]: ContentfulClientApi } = {};
 
@@ -18,6 +18,15 @@ export function init({
   entryTitle?: IEntryTitle;
   style?: IStyles;
 }) {
+  if (!isBrowser()) {
+    return {
+      // tslint:disable-next-line no-empty
+      update: () => {},
+      // tslint:disable-next-line no-empty
+      destroy: () => {}
+    };
+  }
+
   clients[spaceId] = createClient({
     // This is the space ID. A space is like a project folder in Contentful terms
     space: spaceId,

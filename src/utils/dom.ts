@@ -139,3 +139,7 @@ export function containsNode({
 
   return false;
 }
+
+export function isBrowser() {
+  return typeof window !== "undefined" && typeof document !== "undefined";
+}

@@ -3,6 +3,7 @@ import {
   applyStyle,
   containsNode,
   createElement,
+  isBrowser,
   measureHeight,
   renderOverlay
 } from "./dom";
@@ -28,6 +29,7 @@ export {
   constructContentTypeURL,
   constructEntryURL,
   getEntryTitle,
+  isBrowser,
   mergeStyle,
   measureHeight
 };

@@ -8,7 +8,7 @@ import {
   setEntryNode
 } from "./state";
 import { IEntryTitle, IStyles } from "./types";
-import { applyStyle, containsNode, onHover } from "./utils";
+import { applyStyle, containsNode, isBrowser, onHover } from "./utils";
 
 export interface IAttachConfig {
   node: HTMLElement;
@@ -31,6 +31,11 @@ export function attach({
   style,
   asset
 }: IAttachConfig) {
+  if (!isBrowser()) {
+    // tslint:disable-next-line no-empty
+    return () => {};
+  }
+
   if (contentType) {
     setContentTypeNode({ contentType, node });
   }
