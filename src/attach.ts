@@ -8,7 +8,7 @@ import {
   setEntryNode
 } from "./state";
 import { IEntryTitle, IStyles } from "./types";
-import { applyStyle, onHover } from "./utils";
+import { applyStyle, containsNode, onHover } from "./utils";
 
 export interface IAttachConfig {
   node: HTMLElement;
@@ -51,7 +51,7 @@ export function attach({
   }
 
   let destroyPopup: Function | null;
-  let popupNode: HTMLElement | null;
+  let popupNode: HTMLElement;
 
   applyStyle({
     node,
@@ -87,9 +87,9 @@ export function attach({
   }
 
   function onMouseLeave(e: MouseEvent) {
-    const toNode = e.relatedTarget;
+    const checkingNode = e.relatedTarget as HTMLElement;
 
-    if (toNode !== popupNode) {
+    if (!containsNode({ node: popupNode, checkingNode })) {
       internalMouseLeave();
     }
   }

@@ -73,14 +73,16 @@ export function createElement(
       | "h5"
       | "h6"
       | "span";
-    text?: string | null;
+    text?: HTMLElement | string | null;
     style?: { [key: string]: string };
     attrs?: { [key: string]: string };
   } = {}
 ): HTMLElement {
   const element = document.createElement(tag);
-  if (text) {
+  if (text && typeof text === "string") {
     element.innerHTML = text;
+  } else if (text && typeof text === "object") {
+    element.appendChild(text);
   }
 
   if (style) {
@@ -99,4 +101,41 @@ export function createElement(
   }
 
   return element;
+}
+
+export function measureHeight(content: HTMLElement | string): number {
+  const container = createElement({
+    style: {
+      position: "absolute",
+      visibility: "hidden"
+    },
+    text: content
+  });
+
+  document.body.appendChild(container);
+
+  const { height } = container.getBoundingClientRect();
+
+  document.body.removeChild(container);
+
+  return height;
+}
+
+export function containsNode({
+  node,
+  checkingNode
+}: {
+  node: HTMLElement;
+  checkingNode: HTMLElement;
+}) {
+  let inspectingNode: HTMLElement | null = checkingNode;
+  while (inspectingNode !== null) {
+    if (inspectingNode === node) {
+      return true;
+    }
+
+    inspectingNode = inspectingNode.parentElement;
+  }
+
+  return false;
 }
