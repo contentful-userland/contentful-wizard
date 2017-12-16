@@ -42,63 +42,65 @@ export function renderAssets({
   const filteredAssets = Object.keys(assetNodes).filter(
     assetAtPage => assetAtPage !== asset
   );
-  const assetsOnPage = [asset].concat(filteredAssets).filter(Boolean);
+  const assetsOnPage = [asset]
+    .concat(filteredAssets)
+    .filter(Boolean)
+    .map((key: string) => ({ nodes: assetNodes[key], data: assetsData[key] }))
+    .filter(({ nodes }) => nodes && nodes.length > 0);
 
   if (assetsOnPage.length > 0) {
     assetsContainer.appendChild(line);
     assetsContainer.appendChild(header);
   }
 
-  assetsOnPage
-    .map((key: string) => ({ nodes: assetNodes[key], data: assetsData[key] }))
-    .forEach(({ nodes = [], data }: { data: any; nodes: any[] }) => {
-      const element = document.createElement("div");
-      const link = constructAssetURL({
-        spaceId,
-        asset: data.sys.id
-      });
+  assetsOnPage.forEach(({ nodes = [], data }: { data: any; nodes: any[] }) => {
+    const element = document.createElement("div");
+    const link = constructAssetURL({
+      spaceId,
+      asset: data.sys.id
+    });
 
-      const linkNode = createElement({
-        tag: "a",
-        attrs: {
-          href: link,
-          target: "_blank"
-        },
-        text: data.fields.title || data.sys.id,
-        style: {
-          display: "inline-block",
-          borderBottom: "1px dashed #ccc",
-          paddingBottom: "2px",
-          textDecoration: "none",
-          marginBottom: "5px"
-        }
-      });
-
-      let overlays: Function[] = [];
-
-      const cleanup = onHover({
-        node: linkNode,
-        onMouseEnter: () => {
-          nodes.forEach(node => {
-            overlays.push(renderOverlay({ node, style: style.overlay }));
-          });
-        },
-        onMouseLeave: cleanOverlays
-      });
-
-      cleanupFns.push(() => {
-        cleanOverlays();
-        cleanup();
-      });
-
-      element.appendChild(linkNode);
-      assetsContainer.appendChild(element);
-
-      function cleanOverlays() {
-        overlays.forEach(fn => fn());
-        overlays = [];
+    const linkNode = createElement({
+      tag: "a",
+      attrs: {
+        href: link,
+        target: "_blank"
+      },
+      text: data.fields.title || data.sys.id,
+      style: {
+        display: "inline-block",
+        borderBottom: "1px dashed #ccc",
+        paddingBottom: "2px",
+        textDecoration: "none",
+        marginBottom: "5px"
       }
     });
+
+    let overlays: Function[] = [];
+
+    const cleanup = onHover({
+      node: linkNode,
+      onMouseEnter: () => {
+        nodes.forEach(node => {
+          overlays.push(renderOverlay({ node, style: style.overlay }));
+        });
+      },
+      onMouseLeave: cleanOverlays
+    });
+
+    cleanupFns.push(() => {
+      cleanOverlays();
+      cleanup();
+    });
+
+    element.appendChild(linkNode);
+    assetsContainer.appendChild(element);
+
+    function cleanOverlays() {
+      overlays.forEach(fn => fn());
+      overlays = [];
+    }
+  });
 
   return {
     node: assetsContainer,

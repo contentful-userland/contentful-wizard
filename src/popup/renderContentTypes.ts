@@ -43,65 +43,67 @@ export function renderContentTypes({
   const filteredCTNodes = Object.keys(contentTypeNodes).filter(
     contentTypeAtPage => contentTypeAtPage !== contentType
   );
-  const ctsOnPage = [contentType].concat(filteredCTNodes).filter(Boolean);
+  const ctsOnPage = [contentType]
+    .concat(filteredCTNodes)
+    .filter(Boolean)
+    .map((key: string) => ({
+      nodes: contentTypeNodes[key],
+      data: contentTypesData[key]
+    }))
+    .filter(({ nodes }) => nodes && nodes.length > 0);
 
   if (ctsOnPage.length > 0) {
     ctsContainer.appendChild(line);
     ctsContainer.appendChild(header);
   }
-  ctsOnPage
-    .map((key: string) => ({
-      nodes: contentTypeNodes[key],
-      data: contentTypesData[key]
-    }))
-    .forEach(({ nodes = [], data }: { data: IEntity; nodes: any[] }) => {
-      const element = document.createElement("div");
-      const link = constructContentTypeURL({
-        spaceId,
-        contentType: data.sys.id
-      });
+  ctsOnPage.forEach(({ nodes = [], data }: { data: IEntity; nodes: any[] }) => {
+    const element = document.createElement("div");
+    const link = constructContentTypeURL({
+      spaceId,
+      contentType: data.sys.id
+    });
 
-      const linkNode = createElement({
-        tag: "a",
-        attrs: {
-          href: link,
-          target: "_blank"
-        },
-        text: data.name || "No name property!",
-        style: {
-          display: "inline-block",
-          borderBottom: "1px dashed #ccc",
-          textDecoration: "none",
-          paddingBottom: "2px",
-          marginBottom: "5px"
-        }
-      });
-
-      let overlays: Function[] = [];
-
-      const cleanup = onHover({
-        node: linkNode,
-        onMouseEnter: () => {
-          nodes.forEach(node => {
-            overlays.push(renderOverlay({ node, style: style.overlay }));
-          });
-        },
-        onMouseLeave: cleanOverlays
-      });
-
-      cleanupFns.push(() => {
-        cleanOverlays();
-        cleanup();
-      });
-
-      element.appendChild(linkNode);
-      ctsContainer.appendChild(element);
-
-      function cleanOverlays() {
-        overlays.forEach(fn => fn());
-        overlays = [];
+    const linkNode = createElement({
+      tag: "a",
+      attrs: {
+        href: link,
+        target: "_blank"
+      },
+      text: data.name || "No name property!",
+      style: {
+        display: "inline-block",
+        borderBottom: "1px dashed #ccc",
+        textDecoration: "none",
+        paddingBottom: "2px",
+        marginBottom: "5px"
       }
     });
+
+    let overlays: Function[] = [];
+
+    const cleanup = onHover({
+      node: linkNode,
+      onMouseEnter: () => {
+        nodes.forEach(node => {
+          overlays.push(renderOverlay({ node, style: style.overlay }));
+        });
+      },
+      onMouseLeave: cleanOverlays
+    });
+
+    cleanupFns.push(() => {
+      cleanOverlays();
+      cleanup();
+    });
+
+    element.appendChild(linkNode);
+    ctsContainer.appendChild(element);
+
+    function cleanOverlays() {
+      overlays.forEach(fn => fn());
+      overlays = [];
+    }
+  });
 
   return {
     node: ctsContainer,

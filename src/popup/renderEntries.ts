@@ -46,67 +46,67 @@ export function renderEntries({
   const cleanupFns: Function[] = [];
 
   const entries = getCTEntryNodes({ contentType });
-  const entriesKeys = Object.keys(entries);
+  const entriesKeys = Object.keys(entries)
+    .map(entryId => ({
+      entry: entryId,
+      nodes: entries[entryId],
+      data: entriesData[entryId]
+    }))
+    .filter(({ nodes }) => nodes && nodes.length > 0);
 
   if (entriesKeys.length > 0) {
     ctsContainer.appendChild(line);
     ctsContainer.appendChild(header);
   }
 
-  entriesKeys
-    .map(entryId => ({
-      entry: entryId,
-      nodes: entries[entryId],
-      data: entriesData[entryId]
-    }))
-    .forEach(({ entry, nodes, data }) => {
-      const element = document.createElement("div");
-      const link = constructEntryURL({
-        spaceId,
-        entry
-      });
+  entriesKeys.forEach(({ entry, nodes, data }) => {
+    const element = document.createElement("div");
+    const link = constructEntryURL({
+      spaceId,
+      entry
+    });
 
-      const linkNode = createElement({
-        tag: "a",
-        attrs: {
-          href: link,
-          target: "_blank"
-        },
-        text: getEntryTitle({ entry: data, entryTitle }),
-        style: {
-          display: "inline-block",
-          borderBottom: "1px dashed #ccc",
-          textDecoration: "none",
-          paddingBottom: "2px",
-          marginBottom: "5px"
-        }
-      });
-
-      let overlays: Function[] = [];
-
-      const cleanup = onHover({
-        node: linkNode,
-        onMouseEnter: () => {
-          nodes.forEach(node => {
-            overlays.push(renderOverlay({ node, style: style.overlay }));
-          });
-        },
-        onMouseLeave: cleanOverlays
-      });
-
-      cleanupFns.push(() => {
-        cleanOverlays();
-        cleanup();
-      });
-
-      element.appendChild(linkNode);
-      ctsContainer.appendChild(element);
-
-      function cleanOverlays() {
-        overlays.forEach(fn => fn());
-        overlays = [];
+    const linkNode = createElement({
+      tag: "a",
+      attrs: {
+        href: link,
+        target: "_blank"
+      },
+      text: getEntryTitle({ entry: data, entryTitle }),
+      style: {
+        display: "inline-block",
+        borderBottom: "1px dashed #ccc",
+        textDecoration: "none",
+        paddingBottom: "2px",
+        marginBottom: "5px"
       }
     });
+
+    let overlays: Function[] = [];
+
+    const cleanup = onHover({
+      node: linkNode,
+      onMouseEnter: () => {
+        nodes.forEach(node => {
+          overlays.push(renderOverlay({ node, style: style.overlay }));
+        });
+      },
+      onMouseLeave: cleanOverlays
+    });
+
+    cleanupFns.push(() => {
+      cleanOverlays();
+      cleanup();
+    });
+
+    element.appendChild(linkNode);
+    ctsContainer.appendChild(element);
+
+    function cleanOverlays() {
+      overlays.forEach(fn => fn());
+      overlays = [];
+    }
+  });
 
   return {
     node: ctsContainer,
