@@ -154,7 +154,10 @@ function positionVertically({
   const mediumOffset = top + height / 2;
 
   const maxSpace = Math.min(mediumOffset, pageHeight - mediumOffset) * 2;
-  const contentHeight = measureHeight(content);
+  // consider padding of the tooltip itself. In case of
+  // overriding styles it will become incorrect
+  // TODO consider padding property
+  const contentHeight = measureHeight(content) + 30;
 
   const positionStyles: { [key: string]: string } = {};
   if (contentHeight >= pageHeight) {

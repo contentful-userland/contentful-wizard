@@ -16,6 +16,8 @@ const tooltipStyles = {
   zIndex: "999",
   minWidth: "150px",
   maxWidth: "350px",
+  maxHeight: "100vh",
+  overflowY: "scroll",
   padding: "15px",
   border: "2px solid #ccc",
   borderRadius: "5px",
