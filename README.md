@@ -7,6 +7,8 @@ This is a library to add an interactive content explorer to your [contentful-pow
 
 It allows your editors quickly understand which element on the page is responsible for specific entry and content type (or an asset, if you want to mark it to this details).
 
+![Example](./example.jpg "Example")
+
 This is only client-side library, it assumes DOM is available.
 Right now it is in pre-alpha stage, but you can take a look [at the roadmap](./Roadmap.md) to get a feeling what is going to be implemented.
 
