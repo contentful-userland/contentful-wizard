@@ -37,7 +37,7 @@ export function renderEntries({
     text: `${contentTypeData.name} entries:`,
     style: {
       lineHeight: "1.31",
-      fontSize: "1.17",
+      fontSize: "1.17em",
       marginTop: "0",
       marginBottom: "10px"
     }
