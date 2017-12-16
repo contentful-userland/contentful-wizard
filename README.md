@@ -1,5 +1,6 @@
 # Contentful-wizard
 
+[![npm version](https://badge.fury.io/js/contentful-wizard.svg)](https://badge.fury.io/js/contentful-wizard)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 This is a library to add an interactive content explorer to your [contentful-powered project](https://www.contentful.com/) – it allows you to mark parts of your application, and this library will highlight marked block, add automatic tooltips on hover with links to contentful application.
@@ -13,11 +14,13 @@ Right now it is in pre-alpha stage, but you can take a look [at the roadmap](./R
 
 ## Getting started
 
-First, you need to include this library into your application. It will add a global object, which you can call to instantiate a wizard – this will iterate over all DOM elements, picking those with `data-ctfl-entry` and `data-ctfl-asset` data attributes, highlight borders of these elements and add tooltips on hover with all links and info about other elements on the page.
+First, you need to include this library into your application – you can just include [umd build](https://unpkg.com/contentful-wizard@0.0.1-alpha-1/dist/cfl-webpack-wizard.js). It will add a global object, which you can call to instantiate a wizard – this will iterate over all DOM elements, picking those with `data-ctfl-entry` and `data-ctfl-asset` data attributes, highlight borders of these elements and add tooltips on hover with all links and info about other elements on the page.
 
 > You can customize a lot of things, but this is the bare minimum, which might be enough
 
 ```html
+<script src="https://unpkg.com/contentful-wizard@0.0.1-alpha-1/dist/cfl-webpack-wizard.js"></script>
+
 <div data-ctf-content-type="17WjnjeALEOeSyuiMI4QOx" data-ctfl-entry="VQGkwljpe0AmqOmOuW8i9">
   <!-- your entry content -->
 </div>
