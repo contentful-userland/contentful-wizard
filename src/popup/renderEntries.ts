@@ -36,6 +36,8 @@ export function renderEntries({
     tag: "h3",
     text: `${contentTypeData.name} entries:`,
     style: {
+      lineHeight: "1.31",
+      fontSize: "1.17",
       marginTop: "0",
       marginBottom: "10px"
     }
@@ -74,6 +76,7 @@ export function renderEntries({
         style: {
           display: "inline-block",
           borderBottom: "1px dashed #ccc",
+          textDecoration: "none",
           paddingBottom: "2px",
           marginBottom: "5px"
         }

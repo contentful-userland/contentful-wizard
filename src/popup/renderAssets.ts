@@ -30,6 +30,8 @@ export function renderAssets({
     tag: "h3",
     text: "Assets on the page:",
     style: {
+      lineHeight: "1.31",
+      fontSize: "1.17",
       marginTop: "0",
       marginBottom: "10px"
     }
@@ -67,6 +69,7 @@ export function renderAssets({
           display: "inline-block",
           borderBottom: "1px dashed #ccc",
           paddingBottom: "2px",
+          textDecoration: "none",
           marginBottom: "5px"
         }
       });
