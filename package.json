@@ -1,6 +1,6 @@
 {
   "name": "contentful-wizard",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha-1",
   "description": "This is a library to add interactive content explorer to your contentful-powered project.",
   "jsnext:main": "lib/es2015/index.js",
   "module": "lib/es2015/index.js",
@@ -25,7 +25,7 @@
     "build:dist": "npm run build:umd && npm run build:umd:min",
     "build": "npm run build:es2015 && npm run build:commonjs && npm run build:dist",
     "lint": "tslint src/**/*.ts",
-    "test": "jest"
+    "test": "npm run lint"
   },
   "lint-staged": {
     "*.ts": [
