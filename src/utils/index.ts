@@ -1,5 +1,11 @@
 import { animate } from "./animate";
-import { applyStyle, createElement, renderOverlay } from "./dom";
+import {
+  applyStyle,
+  containsNode,
+  createElement,
+  measureHeight,
+  renderOverlay
+} from "./dom";
 import { onHover } from "./events";
 import {
   constructAssetURL,
@@ -16,10 +22,12 @@ export {
   createElement,
   applyStyle,
   animate,
+  containsNode,
   constructAssetURL,
   constructSpaceURL,
   constructContentTypeURL,
   constructEntryURL,
   getEntryTitle,
-  mergeStyle
+  mergeStyle,
+  measureHeight
 };

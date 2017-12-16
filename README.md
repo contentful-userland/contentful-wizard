@@ -2,9 +2,9 @@
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-This is a library to add interactive content explorer to your [contentful-powered project](https://www.contentful.com/).
+This is a library to add an interactive content explorer to your [contentful-powered project](https://www.contentful.com/) – it allows you to mark parts of your application, and this library will highlight marked block, add automatic tooltips on hover with links to contentful application.
 
-It allows your editors quickly understand which element on the page is responsible for specific entry and content type.
+It allows your editors quickly understand which element on the page is responsible for specific entry and content type (or an asset, if you want to mark it to this details).
 
 This is only client-side library, it assumes DOM is available.
 Right now it is in pre-alpha stage, but you can take a look [at the roadmap](./Roadmap.md) to get a feeling what is going to be implemented.
