@@ -32,7 +32,7 @@ export function showPopup({
 }) {
   const loadingContent = `
   <div>
-    ${description}
+    ${description || ""}
   </div>
   loading...`;
   const positionStyles = getCoords({ node, content: loadingContent });
