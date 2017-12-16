@@ -17,7 +17,11 @@ First, you need to include this library into your application. It will add a glo
 
 ```html
 <div data-ctf-content-type="17WjnjeALEOeSyuiMI4QOx" data-ctfl-entry="VQGkwljpe0AmqOmOuW8i9">
-  <!-- your content -->
+  <!-- your entry content -->
+</div>
+
+<div data-ctfl-asset="6nvWJT1AkM64so8Auue4Qx">
+  <!-- your asset content -->
 </div>
 
 <script>
