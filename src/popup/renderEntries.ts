@@ -41,13 +41,17 @@ export function renderEntries({
     }
   });
 
-  ctsContainer.appendChild(line);
-  ctsContainer.appendChild(header);
   const cleanupFns: Function[] = [];
 
   const entries = getCTEntryNodes({ contentType });
+  const entriesKeys = Object.keys(entries);
 
-  Object.keys(entries)
+  if (entriesKeys.length > 0) {
+    ctsContainer.appendChild(line);
+    ctsContainer.appendChild(header);
+  }
+
+  entriesKeys
     .map(entryId => ({
       entry: entryId,
       nodes: entries[entryId],

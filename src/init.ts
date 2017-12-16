@@ -59,22 +59,31 @@ function attachHandlers({
   style: IStyles;
 }) {
   const entryElements = document.querySelectorAll("[data-ctfl-entry]");
+  const assetElements = document.querySelectorAll("[data-ctfl-asset]");
+
+  const allElements = [
+    ...Array.from(entryElements),
+    ...Array.from(assetElements)
+  ];
 
   const cleanupFns: Function[] = [];
 
-  Array.prototype.forEach.call(entryElements, (el: HTMLElement) => {
+  Array.prototype.forEach.call(allElements, (el: HTMLElement) => {
     const contentType = el.getAttribute("data-ctfl-content-type");
     const entry = el.getAttribute("data-ctfl-entry");
     const description = el.getAttribute("data-ctfl-description");
-    const cleanup = attach({
+    const asset = el.getAttribute("data-ctfl-asset");
+    const params: IAttachConfig = {
       entryTitle,
       node: el,
       spaceId,
       contentType,
       entry,
       description,
-      style
-    } as IAttachConfig);
+      style,
+      asset
+    };
+    const cleanup = attach(params);
 
     cleanupFns.push(cleanup);
   });

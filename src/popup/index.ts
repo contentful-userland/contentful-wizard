@@ -1,5 +1,5 @@
 import { IEntryTitle, IStyles } from "../types";
-import { animate, applyStyle, createElement, onHover } from "../utils";
+import { animate, createElement, onHover } from "../utils";
 import { fetchContent } from "./fetch";
 
 export function showPopup({
@@ -8,20 +8,22 @@ export function showPopup({
   contentType,
   entry,
   cleanup,
+  asset,
   entryTitle,
   description,
   style
 }: {
   node: HTMLElement;
   spaceId: string;
-  contentType: string;
-  entry: string;
+  contentType: string | null;
+  entry: string | null;
+  asset: string | null;
   cleanup: Function;
   entryTitle?: IEntryTitle;
-  description?: string;
+  description: string | null;
   style: IStyles;
 }) {
-  const { top, left, right } = node.getBoundingClientRect();
+  const { top, right } = node.getBoundingClientRect();
   const offsetY = window.pageYOffset;
 
   const tooltip: HTMLElement = createElement({
@@ -40,6 +42,7 @@ export function showPopup({
     spaceId,
     contentType,
     entry,
+    asset,
     entryTitle,
     description,
     style

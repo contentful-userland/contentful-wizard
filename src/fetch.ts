@@ -9,18 +9,39 @@ export interface IEntity {
 
 const contentTypesData: { [key: string]: IEntity } = {};
 const entriesData: { [key: string]: IEntity } = {};
+const assetsData: { [key: string]: IEntity } = {};
 
 let contentTypesPromise: Promise<any>;
 let entriesPromise: Promise<any>;
+let assetsPromise: Promise<any>;
+
+export function fetchAssets({ client }: { client: ContentfulClientApi }) {
+  if (!assetsPromise) {
+    assetsPromise = client
+      .getAssets({
+        limit: 1000
+      })
+      .then(({ items }) => {
+        items.forEach((item: IEntity) => {
+          assetsData[item.sys.id] = item;
+        });
+      })
+      .then();
+  }
+
+  return assetsPromise;
+}
 
 export function fetch({
   client,
   contentType,
-  entry
+  entry,
+  asset
 }: {
   client: ContentfulClientApi;
-  contentType: string;
-  entry: string;
+  contentType: string | null;
+  entry: string | null;
+  asset: string | null;
 }) {
   if (!contentTypesPromise) {
     contentTypesPromise = client
@@ -50,26 +71,53 @@ export function fetch({
       });
   }
 
-  return Promise.all([contentTypesPromise, entriesPromise])
-    .then(() => {
-      // check content type
-      const contentTypeFetchedData = contentTypesData[contentType];
-
-      if (!contentTypeFetchedData) {
-        return client.getContentType(contentType).then(item => {
-          contentTypesData[item.sys.id] = item;
+  if (!assetsPromise) {
+    assetsPromise = client
+      .getAssets({
+        limit: 1000
+      })
+      .then(({ items }) => {
+        items.forEach((item: IEntity) => {
+          assetsData[item.sys.id] = item;
         });
+      });
+  }
+
+  return Promise.all([contentTypesPromise, entriesPromise, assetsPromise])
+    .then(() => {
+      if (contentType) {
+        // check content type
+        const contentTypeFetchedData = contentTypesData[contentType];
+
+        if (!contentTypeFetchedData) {
+          return client.getContentType(contentType).then(item => {
+            contentTypesData[item.sys.id] = item;
+          });
+        }
       }
     })
     .then(() => {
-      // check entry
-      const entryFetchedData = entriesData[entry];
+      if (entry) {
+        // check entry
+        const entryFetchedData = entriesData[entry];
 
-      if (!entryFetchedData) {
-        return client.getEntry(contentType).then(item => {
-          entriesData[item.sys.id] = item;
-        });
+        if (!entryFetchedData) {
+          return client.getEntry(entry).then(item => {
+            entriesData[item.sys.id] = item;
+          });
+        }
       }
     })
-    .then(() => ({ contentTypesData, entriesData }));
+    .then(() => {
+      if (asset) {
+        const assetFetchedData = assetsData[asset];
+
+        if (!assetFetchedData) {
+          return client.getAsset(asset).then(item => {
+            assetsData[item.sys.id] = item;
+          });
+        }
+      }
+    })
+    .then(() => ({ contentTypesData, entriesData, assetsData }));
 }

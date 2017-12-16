@@ -26,6 +26,20 @@ export function constructEntryURL({
   return `${appPrefix}/spaces/${spaceId}/entries/${entry}`;
 }
 
+export function constructMediaURL({ spaceId }: { spaceId: string }) {
+  return `${appPrefix}/spaces/${spaceId}/assets`;
+}
+
+export function constructAssetURL({
+  spaceId,
+  asset
+}: {
+  spaceId: string;
+  asset: string;
+}) {
+  return `${appPrefix}/spaces/${spaceId}/assets/${asset}`;
+}
+
 export function getEntryTitle({
   entry,
   entryTitle

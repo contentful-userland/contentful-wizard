@@ -1,5 +1,4 @@
-import { IEntity } from "../fetch";
-import { IEntryTitle, IStyle } from "../types";
+import { IStyle } from "../types";
 import { animate } from "./animate";
 
 export function renderOverlay({
@@ -74,7 +73,7 @@ export function createElement(
       | "h5"
       | "h6"
       | "span";
-    text?: string;
+    text?: string | null;
     style?: { [key: string]: string };
     attrs?: { [key: string]: string };
   } = {}
@@ -101,7 +100,3 @@ export function createElement(
 
   return element;
 }
-
-// export function measure(node: HTMLElement) {
-
-// }

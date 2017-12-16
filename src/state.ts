@@ -1,5 +1,3 @@
-import { IEntity } from "./fetch";
-
 export interface IContentTypeNodes {
   [key: string]: HTMLElement[];
 }
@@ -10,8 +8,53 @@ export interface IEntryNodes {
   };
 }
 
+export interface IAssetNodes {
+  [key: string]: HTMLElement[];
+}
+
 const contentTypeNodes: IContentTypeNodes = {};
 const entryNodes: IEntryNodes = {};
+const assetNodes: IAssetNodes = {};
+
+export function getAssetsNodes(): IAssetNodes {
+  return assetNodes;
+}
+
+export function getAssetNodes({ asset }: { asset: string }): HTMLElement[] {
+  return assetNodes[asset] || [];
+}
+
+export function removeAssetNode({
+  asset,
+  node
+}: {
+  asset: string;
+  node: HTMLElement;
+}): IAssetNodes {
+  if (assetNodes[asset]) {
+    assetNodes[asset] = assetNodes[asset].filter(
+      assetNode => assetNode !== node
+    );
+  }
+
+  return assetNodes;
+}
+
+export function setAssetNode({
+  asset,
+  node
+}: {
+  asset: string;
+  node: HTMLElement;
+}): IAssetNodes {
+  if (!assetNodes[asset]) {
+    assetNodes[asset] = [];
+  }
+
+  assetNodes[asset].push(node);
+
+  return assetNodes;
+}
 
 export function getContentTypeNodes(): IContentTypeNodes {
   return contentTypeNodes;
@@ -110,8 +153,6 @@ export function removeEntryNode({
   node: HTMLElement;
   entry: string;
 }): IEntryNodes {
-  const entriesByContentType = entryNodes[contentType];
-
   if (entryNodes[contentType] && entryNodes[contentType][entry]) {
     entryNodes[contentType][entry] = entryNodes[contentType][entry].filter(
       node => node !== entryNode

@@ -11,7 +11,7 @@ export function renderEntriesByCt({
   entryTitle,
   style
 }: {
-  contentType: string;
+  contentType: string | null;
   contentTypesData: { [key: string]: any };
   entriesData: { [key: string]: any };
   spaceId: string;
@@ -23,19 +23,22 @@ export function renderEntriesByCt({
   const filteredCTs = Object.keys(getContentTypeNodes()).filter(
     contentTypeAtPage => contentTypeAtPage !== contentType
   );
-  [contentType].concat(filteredCTs).forEach(contentTypeAtPage => {
-    const { node, cleanup } = renderEntries({
-      contentType: contentTypeAtPage,
-      contentTypesData,
-      entriesData,
-      spaceId,
-      entryTitle,
-      style
-    });
+  [contentType]
+    .concat(filteredCTs)
+    .filter(Boolean)
+    .forEach((contentTypeAtPage: string) => {
+      const { node, cleanup } = renderEntries({
+        contentType: contentTypeAtPage,
+        contentTypesData,
+        entriesData,
+        spaceId,
+        entryTitle,
+        style
+      });
 
-    container.appendChild(node);
-    cleanupFns.push(cleanup);
-  });
+      container.appendChild(node);
+      cleanupFns.push(cleanup);
+    });
 
   return {
     node: container,

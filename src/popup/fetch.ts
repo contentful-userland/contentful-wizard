@@ -1,12 +1,13 @@
-import { fetch, IEntity } from "../fetch";
+import { fetch } from "../fetch";
 import { clients } from "../init";
 import { IEntryTitle, IStyles } from "../types";
-import { createElement } from "../utils";
+import { constructAssetURL, createElement } from "../utils";
 import {
   constructContentTypeURL,
   constructEntryURL,
   constructSpaceURL
 } from "../utils";
+import { renderAssets } from "./renderAssets";
 import { renderContentTypes } from "./renderContentTypes";
 import { renderEntriesByCt } from "./renderEntriesByCt";
 
@@ -14,25 +15,28 @@ export function fetchContent({
   spaceId,
   contentType,
   entry,
+  asset,
   entryTitle,
   description,
   style
 }: {
   spaceId: string;
-  contentType: string;
-  entry: string;
+  contentType: string | null;
+  entry: string | null;
+  asset: string | null;
   entryTitle?: IEntryTitle;
-  description?: string;
+  description: string | null;
   style: IStyles;
 }) {
   let closed = false;
   const client = clients[spaceId];
   const cleanupFns: Function[] = [];
-  const promise = fetch({ client, contentType, entry }).then(
-    ({ contentTypesData, entriesData }) => {
+  const promise = fetch({ client, contentType, entry, asset }).then(
+    ({ contentTypesData, entriesData, assetsData }) => {
       if (!closed) {
         const container = document.createElement("div");
         const { node: ctsContainer, cleanup: ctsCleanup } = renderContentTypes({
+          contentType,
           contentTypesData,
           spaceId,
           style
@@ -48,31 +52,58 @@ export function fetchContent({
           spaceId,
           style
         });
-        cleanupFns.push(ctsCleanup, entriesCleanup);
+
+        const { node: assetsContainer, cleanup: assetsCleanup } = renderAssets({
+          assetsData,
+          spaceId,
+          style,
+          asset
+        });
+        cleanupFns.push(ctsCleanup, entriesCleanup, assetsCleanup);
 
         const spaceURL = constructSpaceURL({ spaceId });
         const descriptionNode = createElement({
           text: description
         });
-        const contentTypeURL = constructContentTypeURL({
-          contentType,
-          spaceId
-        });
-        const entryURL = constructEntryURL({ spaceId, entry });
+
         const spaceLink = renderLink({ href: spaceURL, text: "Link to space" });
-        const ctLink = renderLink({
-          href: contentTypeURL,
-          text: "Link to content type"
-        });
-        const entryLink = renderLink({ href: entryURL, text: "Link to entry" });
 
         container.appendChild(descriptionNode);
         container.appendChild(spaceLink);
-        container.appendChild(ctLink);
-        container.appendChild(entryLink);
+
+        if (contentType) {
+          const contentTypeURL = constructContentTypeURL({
+            contentType,
+            spaceId
+          });
+          const ctLink = renderLink({
+            href: contentTypeURL,
+            text: "Link to content type"
+          });
+          container.appendChild(ctLink);
+        }
+
+        if (entry) {
+          const entryURL = constructEntryURL({ spaceId, entry });
+          const entryLink = renderLink({
+            href: entryURL,
+            text: "Link to entry"
+          });
+          container.appendChild(entryLink);
+        }
+
+        if (asset) {
+          const assetURL = constructAssetURL({ spaceId, asset });
+          const assetLink = renderLink({
+            href: assetURL,
+            text: "Link to asset"
+          });
+          container.appendChild(assetLink);
+        }
 
         container.appendChild(ctsContainer);
         container.appendChild(entriesContainer);
+        container.appendChild(assetsContainer);
 
         return container;
       }

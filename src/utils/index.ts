@@ -2,6 +2,7 @@ import { animate } from "./animate";
 import { applyStyle, createElement, renderOverlay } from "./dom";
 import { onHover } from "./events";
 import {
+  constructAssetURL,
   constructContentTypeURL,
   constructEntryURL,
   constructSpaceURL,
@@ -15,6 +16,7 @@ export {
   createElement,
   applyStyle,
   animate,
+  constructAssetURL,
   constructSpaceURL,
   constructContentTypeURL,
   constructEntryURL,

@@ -1,7 +1,9 @@
 import { showPopup } from "./popup";
 import {
+  removeAssetNode,
   removeContentTypeNode,
   removeEntryNode,
+  setAssetNode,
   setContentTypeNode,
   setEntryNode
 } from "./state";
@@ -10,11 +12,12 @@ import { applyStyle, onHover } from "./utils";
 
 export interface IAttachConfig {
   node: HTMLElement;
-  contentType: string;
-  entry: string;
+  contentType: string | null;
+  entry: string | null;
   spaceId: string;
+  asset: string | null;
   entryTitle?: IEntryTitle;
-  description?: string;
+  description: string | null;
   style: IStyles;
 }
 
@@ -25,14 +28,28 @@ export function attach({
   spaceId,
   entryTitle,
   description,
-  style
+  style,
+  asset
 }: IAttachConfig) {
-  setContentTypeNode({ contentType, node });
-  setEntryNode({
-    contentType,
-    entry,
-    node
-  });
+  if (contentType) {
+    setContentTypeNode({ contentType, node });
+  }
+
+  if (contentType && entry) {
+    setEntryNode({
+      contentType,
+      entry,
+      node
+    });
+  }
+
+  if (asset) {
+    setAssetNode({
+      asset,
+      node
+    });
+  }
+
   let destroyPopup: Function | null;
   let popupNode: HTMLElement | null;
 
@@ -59,6 +76,7 @@ export function attach({
       spaceId,
       entry,
       contentType,
+      asset,
       cleanup: internalMouseLeave,
       entryTitle,
       description,
@@ -88,8 +106,17 @@ export function attach({
   }
 
   function cleanup() {
-    removeContentTypeNode({ contentType, node });
-    removeEntryNode({ contentType, node, entry });
+    if (contentType) {
+      removeContentTypeNode({ contentType, node });
+    }
+
+    if (contentType && entry) {
+      removeEntryNode({ contentType, node, entry });
+    }
+
+    if (asset) {
+      removeAssetNode({ asset, node });
+    }
     destroyPopup && destroyPopup();
     cleanHover && cleanHover();
   }

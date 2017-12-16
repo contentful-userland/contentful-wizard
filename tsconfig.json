@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "declaration": true,
     "moduleResolution": "node",
     "module": "es2015",
@@ -11,7 +13,6 @@
     ],
     "noImplicitAny": true,
     "sourceMap": true,
-    "noUnusedParameters": true,
     "strictNullChecks": true,
     "outDir": "lib/es2015"
   },

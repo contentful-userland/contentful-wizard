@@ -1,25 +1,24 @@
-import { IEntity } from "../fetch";
-import { getContentTypeNodes } from "../state";
+import { getAssetsNodes } from "../state";
 import { IStyles } from "../types";
 import {
-  constructContentTypeURL,
+  constructAssetURL,
   createElement,
   onHover,
   renderOverlay
 } from "../utils";
 
-export function renderContentTypes({
-  contentTypesData,
+export function renderAssets({
+  assetsData,
   spaceId,
   style,
-  contentType
+  asset
 }: {
-  contentTypesData: { [key: string]: any };
+  assetsData: { [key: string]: any };
   spaceId: string;
   style: IStyles;
-  contentType: string | null;
+  asset: string | null;
 }) {
-  const ctsContainer = document.createElement("div");
+  const assetsContainer = document.createElement("div");
   const line = createElement({
     style: {
       height: "1px",
@@ -29,7 +28,7 @@ export function renderContentTypes({
   });
   const header = createElement({
     tag: "h3",
-    text: "Content types on the page:",
+    text: "Assets on the page:",
     style: {
       marginTop: "0",
       marginBottom: "10px"
@@ -37,26 +36,24 @@ export function renderContentTypes({
   });
 
   const cleanupFns: Function[] = [];
-  const contentTypeNodes = getContentTypeNodes();
-  const filteredCTNodes = Object.keys(contentTypeNodes).filter(
-    contentTypeAtPage => contentTypeAtPage !== contentType
+  const assetNodes = getAssetsNodes();
+  const filteredAssets = Object.keys(assetNodes).filter(
+    assetAtPage => assetAtPage !== asset
   );
-  const ctsOnPage = [contentType].concat(filteredCTNodes).filter(Boolean);
+  const assetsOnPage = [asset].concat(filteredAssets).filter(Boolean);
 
-  if (ctsOnPage.length > 0) {
-    ctsContainer.appendChild(line);
-    ctsContainer.appendChild(header);
+  if (assetsOnPage.length > 0) {
+    assetsContainer.appendChild(line);
+    assetsContainer.appendChild(header);
   }
-  ctsOnPage
-    .map((key: string) => ({
-      nodes: contentTypeNodes[key],
-      data: contentTypesData[key]
-    }))
-    .forEach(({ nodes = [], data }: { data: IEntity; nodes: any[] }) => {
+
+  assetsOnPage
+    .map((key: string) => ({ nodes: assetNodes[key], data: assetsData[key] }))
+    .forEach(({ nodes = [], data }: { data: any; nodes: any[] }) => {
       const element = document.createElement("div");
-      const link = constructContentTypeURL({
+      const link = constructAssetURL({
         spaceId,
-        contentType: data.sys.id
+        asset: data.sys.id
       });
 
       const linkNode = createElement({
@@ -65,7 +62,7 @@ export function renderContentTypes({
           href: link,
           target: "_blank"
         },
-        text: data.name || "No name property!",
+        text: data.fields.title || data.sys.id,
         style: {
           display: "inline-block",
           borderBottom: "1px dashed #ccc",
@@ -92,7 +89,7 @@ export function renderContentTypes({
       });
 
       element.appendChild(linkNode);
-      ctsContainer.appendChild(element);
+      assetsContainer.appendChild(element);
 
       function cleanOverlays() {
         overlays.forEach(fn => fn());
@@ -101,7 +98,7 @@ export function renderContentTypes({
     });
 
   return {
-    node: ctsContainer,
+    node: assetsContainer,
     cleanup: () => {
       cleanupFns.forEach(fn => fn());
     }
