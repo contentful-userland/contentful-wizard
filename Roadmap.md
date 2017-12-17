@@ -25,4 +25,5 @@ There are no explicit priorities here, and some items can be thrown away, and so
   - ~~border/overlay for elements with data-attributes~~
 
 - improve tooltip:
-  - add "nose", so it looks better
+  - ~~automatic rearrangement according to the screen's position~~
+  - ~~automatically detect at which side it is better to render tooltip~~
