@@ -217,16 +217,6 @@ However, there are couple of things in the roadmap:
 
 Please, create an issue in case you feel this is important (and if you have another idea, you are welcome to share it!).
 
-## Usage
-
-This is not ready for usage yet, so it is not distributed yet in any package managers or CDNs. You can build it by yourself, if you really want to:
-
-```sh
-npm run build
-```
-
-It will build two folders – `lib` and `dist`, where the first one contains ES modules code, and the latter one has [UMD builds](https://github.com/umdjs/umd) to use in the browser directly – you can copy this file to your application and serve by yourself.
-
 ## License
 
 MIT
