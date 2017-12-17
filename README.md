@@ -7,6 +7,9 @@ This is a library to add an interactive content explorer to your [contentful-pow
 
 It allows your editors quickly understand which element on the page is responsible for specific entry and content type (or an asset, if you want to mark it to this details).
 
+> Blog example: [live demo](https://dist-dohdcjzdoz.now.sh/) | [integration commit](https://github.com/Bloomca/blog-in-5-minutes/commit/2419bcf23e54e59ec130728432b986078bc11b88)
+
+![Blog example](./example-blog.jpg "Blog example")
 ![Example](./example.jpg "Example")
 
 This is only client-side library, it assumes DOM is available.
@@ -16,12 +19,12 @@ Right now it is in pre-alpha stage, but you can take a look [at the roadmap](./R
 
 ## Getting started
 
-First, you need to include this library into your application – you can just include [umd build](https://unpkg.com/contentful-wizard@0.0.1-alpha-1/dist/cfl-webpack-wizard.js). It will add a global object, which you can call to instantiate a wizard – this will iterate over all DOM elements, picking those with `data-ctfl-entry` and `data-ctfl-asset` data attributes, highlight borders of these elements and add tooltips on hover with all links and info about other elements on the page.
+First, you need to include this library into your application – you can just include [umd build](https://unpkg.com/contentful-wizard@0.0.1-alpha-6/dist/contentful-wizard.min.js). It will add a global object, which you can call to instantiate a wizard – this will iterate over all DOM elements, picking those with `data-ctfl-entry` and `data-ctfl-asset` data attributes, highlight borders of these elements and add tooltips on hover with all links and info about other elements on the page.
 
 > You can customize a lot of things, but this is the bare minimum, which might be enough
 
 ```html
-<script src="https://unpkg.com/contentful-wizard@0.0.1-alpha-1/dist/cfl-webpack-wizard.js"></script>
+<script src="https://unpkg.com/contentful-wizard@0.0.1-alpha-6/dist/contentful-wizard.min.js"></script>
 
 <div data-ctf-content-type="17WjnjeALEOeSyuiMI4QOx" data-ctfl-entry="VQGkwljpe0AmqOmOuW8i9">
   <!-- your entry content -->
