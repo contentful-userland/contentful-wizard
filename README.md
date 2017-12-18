@@ -138,7 +138,41 @@ wizard.destroy();
 
 ## Single Page Applications
 
-In case you have rich web application, where content can change very often, and the whole page updates don't make a lot of sense, since they happen too often, there is a way to attach/deattach them manually – for example, it makes sense to add them in lifecycle hooks. I'll show it using [react lifecycle hooks](https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class) as an example, but it works similarly across all popular frameworks.
+In case you have rich web application, where content can change very often, and the whole page updates don't make a lot of sense, since they happen too often, there is a way to attach/deattach them manually:
+
+```js
+import { attach, init } from 'contentful-wizard';
+
+init({
+  spaceId: 'your_space',
+  key: 'CDA_key'
+});
+
+const cancel = attach({
+  node: document.getElementById('myEntry'),
+  spaceId: 'your_space',
+
+  // in case you have an entry
+  contentType: '<Content Type ID>',
+  entry: '<Entry ID>',
+  // optional, by default 'title' and 'name' will be tried
+  entryTitle: 'myTitleField',
+
+  // in case you have an asset
+  asset: '<Asset ID>',
+
+  // in case you want to provide your content on top
+  // of the tooltip
+  description: 'This is our main story',
+  
+  // If you want to override styles for this specific
+  // node. They will be merged with passed in `init` fn
+  // for structure see https://github.com/Bloomca/contentful-wizard#styling
+  style: { ... }
+});
+```
+
+In practice, using modern frameworks, it makes sense to add them in lifecycle hooks. I'll show it using [react lifecycle hooks](https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class) as an example, but it works similarly across all popular frameworks.
 
 ```js
 // init during the bootstrap of your application
@@ -216,6 +250,12 @@ However, there are couple of things in the roadmap:
 - control panel to show only some parts
 
 Please, create an issue in case you feel this is important (and if you have another idea, you are welcome to share it!).
+
+## Contributing
+
+All contributions are more than welcome! If you want to add some new feature, I'd kindly ask you to create an issue first, so we can discuss the solution first – since the goal of this library is pretty abstract, it makes sense to discuss problem first, and only afterwards implement it, right?
+
+You can take a look [at the Roadmap](./Roadmap.md), in order to feel what is going to be implemented. If you feel something does not make sense, or can be done better, please submit an issue as well!
 
 ## License
 
