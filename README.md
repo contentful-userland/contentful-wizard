@@ -7,6 +7,10 @@ This is a library to add an interactive content explorer to your [contentful-pow
 
 It allows your editors quickly understand which element on the page is responsible for specific entry and content type (or an asset, if you want to mark it to this details).
 
+> The example app: [live demo](https://contentful-wizard-tea.bloomca.me)  |  [integration commit](https://github.com/Bloomca/the-example-app.nodejs/commit/f4932887b6a1cc7a91072e54589a81c48e06d1f1)
+
+<a href="https://contentful-wizard-tea.bloomca.me" target="_blank"><img src="./integration.jpg" alt="Screenshot of the example app"/></a>
+
 > Blog example: [live demo](https://dist-dohdcjzdoz.now.sh/) | [integration commit](https://github.com/Bloomca/blog-in-5-minutes/commit/2419bcf23e54e59ec130728432b986078bc11b88)
 
 ![Blog example](./example-blog.jpg "Blog example")
