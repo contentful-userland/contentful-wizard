@@ -21,6 +21,10 @@ Right now it is in pre-alpha stage, but you can take a look [at the roadmap](./R
 
 > This library is in alpha stage – it is a proof of concept with (likely) a lot of bugs. Feedback is welcome!
 
+## Contribution
+
+This project is part of [contentful-userland](https://github.com/contentful-userland) which means that we’re always open to contributions and pull requests. You can learn more about how contentful userland is organized by visiting [our about repository](https://github.com/contentful-userland/about).
+
 ## Getting started
 
 First, you need to include this library into your application – you can just include [umd build](https://unpkg.com/contentful-wizard@0.0.1-alpha-6/dist/contentful-wizard.min.js). It will add a global object, which you can call to instantiate a wizard – this will iterate over all DOM elements, picking those with `data-ctfl-entry` and `data-ctfl-asset` data attributes, highlight borders of these elements and add tooltips on hover with all links and info about other elements on the page.
