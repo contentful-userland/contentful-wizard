@@ -1,21 +1,23 @@
 import { ContentfulClientApi, createClient } from "contentful";
 import { attach, IAttachConfig } from "./attach";
+import { setStyle } from "./state";
 import { IEntryTitle, IStyles } from "./types";
 import { isBrowser, mergeStyle } from "./utils";
-import { setStyle } from "./state";
 
 export const clients: { [key: string]: ContentfulClientApi } = {};
 
 export function init({
   key,
   spaceId,
-  preview,
+  host,
+  basePath,
   entryTitle,
   style
 }: {
   key: string;
   spaceId: string;
-  preview?: boolean;
+  host?: string;
+  basePath?: string;
   entryTitle?: IEntryTitle;
   style?: IStyles;
 }) {
@@ -35,7 +37,8 @@ export function init({
     accessToken: key,
     // no additional requests
     resolveLinks: false,
-    host: preview ? "preview.contentful.com" : undefined
+    basePath,
+    host: host ? host : "cdn.contentful.com"
   });
 
   const mergedStyle = mergeStyle(style);
