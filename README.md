@@ -78,6 +78,21 @@ If you don't provide any (or fields by your strategy don't exist or don't have a
 
 > There is no "smart" guessing strategy (like trying to list all fields with string value and get one with a short enough value), since it can easily introduce incosistency, and it will become confusing.
 
+
+## Initialization
+
+> In default configuration there is pre-configured host for you published entries and assets.
+> If you need work with preview items or custom host you have to set in you init script following.
+
+```js
+CTFLWizard.init({
+  spaceId: 's25qxvg',
+  key: 'f78aw812mlswwasw', // your API key
+  host: 'preview.contentful.com' //Preview host
+});
+``` 
+
+
 ## Styling
 
 Your use-case might be different – for example, you need wide tooltips, or default colours don't match your schema; you can customize all default styles, except positioning (`top`, `left`, `right`, `bottom`), it is calculated automatically and adjusted to the content. You provide your own styling during calling `CTFLWizard.init`, and you can omit any of these properties, and the whole property is optional – below you can find a commented breakdown on all style options:
