@@ -88,7 +88,7 @@ If you don't provide any (or fields by your strategy don't exist or don't have a
 CTFLWizard.init({
   spaceId: 's25qxvg',
   key: 'f78aw812mlswwasw', // your API key
-  host: 'preview.contentful.com' //Preview host
+  host: 'preview.contentful.com' // preview host
 });
 ``` 
 
