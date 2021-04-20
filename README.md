@@ -82,7 +82,7 @@ If you don't provide any (or fields by your strategy don't exist or don't have a
 ## Initialization
 
 > In default configuration there is pre-configured host for you published entries and assets.
-> If you need work with preview items or custom host you have to set in you init script following.
+> If you need to work with preview items define a custom host as `init` parameter.
 
 ```js
 CTFLWizard.init({
