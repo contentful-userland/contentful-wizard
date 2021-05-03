@@ -49,7 +49,7 @@
   },
   "homepage": "https://github.com/Bloomca/contentful-wizard#readme",
   "dependencies": {
-    "contentful": "^5.0.5",
+    "contentful": "^8.3.2",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
