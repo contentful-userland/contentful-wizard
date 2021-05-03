@@ -39,7 +39,7 @@ export function init({
     accessToken: key,
     // no additional requests
     resolveLinks: false,
-    environment,
+    environment: environment ? environment : "master",
     basePath,
     host: host ? host : "cdn.contentful.com"
   });
