@@ -11,12 +11,14 @@ export function init({
   spaceId,
   host,
   basePath,
+  environment,
   entryTitle,
   style
 }: {
   key: string;
   spaceId: string;
   host?: string;
+  environment?: string;
   basePath?: string;
   entryTitle?: IEntryTitle;
   style?: IStyles;
@@ -37,6 +39,7 @@ export function init({
     accessToken: key,
     // no additional requests
     resolveLinks: false,
+    environment: environment ? environment : "master",
     basePath,
     host: host ? host : "cdn.contentful.com"
   });

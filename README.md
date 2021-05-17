@@ -128,6 +128,17 @@ CTFLWizard.init({
 });
 ```
 
+## Environments
+Contentful-wizard now supports [environments](https://www.contentful.com/developers/docs/concepts/multiple-environments/)
+It is optional feature with default 'master' value
+```
+CTFLWizard.init({
+  spaceId: 's25qxvg',
+  key: 'f78aw812mlswwasw', // your API key
+  environment: 'development' //environment name
+  })
+```
+
 ## Update Tooltips
 
 Create wizard instance initializes the library, attaching listeners to all elements with corresponding data-attributes to show tooltip on hovering. However, sometimes you change content on your page, and you would like to add tooltips for new content. In order to do that, you can invoke `.update` method on returned instance:
