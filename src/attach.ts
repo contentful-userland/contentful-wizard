@@ -22,6 +22,7 @@ export interface IAttachConfig {
   contentType: string | null;
   entry: string | null;
   spaceId: string;
+  environment?: string;
   asset: string | null;
   entryTitle?: IEntryTitle;
   description: string | null;
@@ -33,6 +34,7 @@ export function attach({
   contentType,
   entry,
   spaceId,
+  environment,
   entryTitle,
   description,
   style: rawStyle = getStyle({ spaceId }),
@@ -89,6 +91,7 @@ export function attach({
     const popupData = showPopup({
       node,
       spaceId,
+      environment,
       entry,
       contentType,
       asset,

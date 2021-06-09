@@ -1,6 +1,6 @@
 {
   "name": "contentful-wizard",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "This is a library to add interactive content explorer to your contentful-powered project.",
   "jsnext:main": "lib/es2015/index.js",
   "module": "lib/es2015/index.js",
@@ -49,8 +49,8 @@
   },
   "homepage": "https://github.com/Bloomca/contentful-wizard#readme",
   "dependencies": {
-    "contentful": "^8.3.2",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "contentful": "^8.3.7"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -8,6 +8,7 @@ export function renderEntriesByCt({
   contentTypesData,
   entriesData,
   spaceId,
+  environment,
   entryTitle,
   style
 }: {
@@ -15,6 +16,7 @@ export function renderEntriesByCt({
   contentTypesData: { [key: string]: any };
   entriesData: { [key: string]: any };
   spaceId: string;
+  environment?: string;
   entryTitle?: IEntryTitle;
   style: IStyles;
 }) {
@@ -32,6 +34,7 @@ export function renderEntriesByCt({
         contentTypesData,
         entriesData,
         spaceId,
+        environment,
         entryTitle,
         style
       });

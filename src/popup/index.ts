@@ -12,6 +12,7 @@ import { fetchContent } from "./fetch";
 export function showPopup({
   node,
   spaceId,
+  environment,
   contentType,
   entry,
   cleanup,
@@ -22,6 +23,7 @@ export function showPopup({
 }: {
   node: HTMLElement;
   spaceId: string;
+  environment?: string;
   contentType: string | null;
   entry: string | null;
   asset: string | null;
@@ -43,6 +45,7 @@ export function showPopup({
 
   const { promise, cleanup: cleanupContent } = fetchContent({
     spaceId,
+    environment,
     contentType,
     entry,
     asset,

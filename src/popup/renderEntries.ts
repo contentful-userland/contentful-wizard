@@ -12,6 +12,7 @@ export function renderEntries({
   contentTypesData,
   entriesData,
   spaceId,
+  environment,
   contentType,
   entryTitle,
   style
@@ -19,6 +20,7 @@ export function renderEntries({
   contentTypesData: { [key: string]: any };
   entriesData: { [key: string]: any };
   spaceId: string;
+  environment?: string;
   contentType: string;
   entryTitle?: IEntryTitle;
   style: IStyles;
@@ -63,7 +65,8 @@ export function renderEntries({
     const element = document.createElement("div");
     const link = constructEntryURL({
       spaceId,
-      entry
+      entry,
+      environment
     });
 
     const linkNode = createElement({
