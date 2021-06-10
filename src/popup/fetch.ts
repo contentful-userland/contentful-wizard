@@ -71,10 +71,17 @@ export function fetchContent({
         container.appendChild(descriptionNode);
         container.appendChild(spaceLink);
 
+        const contentTypeData = contentType && contentTypesData[contentType];
+        const contentTypeEnvironment = contentTypeData
+          ? contentTypeData.sys.environment &&
+            contentTypeData.sys.environment.sys.id
+          : undefined;
+
         if (contentType) {
           const contentTypeURL = constructContentTypeURL({
             contentType,
-            spaceId
+            spaceId,
+            environment: contentTypeEnvironment
           });
           const ctLink = renderLink({
             href: contentTypeURL,
@@ -83,8 +90,17 @@ export function fetchContent({
           container.appendChild(ctLink);
         }
 
+        const entryData = entry && entriesData[entry];
+        const entryEnvironment = entryData
+          ? entryData.sys.environment && entryData.sys.environment.sys.id
+          : undefined;
+
         if (entry) {
-          const entryURL = constructEntryURL({ spaceId, entry });
+          const entryURL = constructEntryURL({
+            spaceId,
+            entry,
+            environment: entryEnvironment
+          });
           const entryLink = renderLink({
             href: entryURL,
             text: "Link to entry"

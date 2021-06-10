@@ -63,7 +63,8 @@ export function renderEntries({
     const element = document.createElement("div");
     const link = constructEntryURL({
       spaceId,
-      entry
+      entry,
+      environment: data.sys.environment && data.sys.environment.sys.id
     });
 
     const linkNode = createElement({

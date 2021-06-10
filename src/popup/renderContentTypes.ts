@@ -60,7 +60,8 @@ export function renderContentTypes({
     const element = document.createElement("div");
     const link = constructContentTypeURL({
       spaceId,
-      contentType: data.sys.id
+      contentType: data.sys.id,
+      environment: data.sys.environment && data.sys.environment.sys.id
     });
 
     const linkNode = createElement({

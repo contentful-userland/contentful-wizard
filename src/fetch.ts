@@ -1,8 +1,15 @@
 import { ContentfulClientApi } from "contentful";
 
+export interface ISysEntity {
+  sys: {
+    id: string;
+  };
+}
+
 export interface IEntity {
   sys: {
     id: string;
+    environment?: ISysEntity;
   };
   name?: string;
 }

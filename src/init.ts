@@ -58,7 +58,11 @@ export function init({
     // cleanup old tooltips and reattach everything once again
     update: () => {
       cleanup && cleanup();
-      cleanup = attachHandlers({ spaceId, entryTitle, style: mergedStyle });
+      cleanup = attachHandlers({
+        spaceId,
+        entryTitle,
+        style: mergedStyle
+      });
     },
     destroy: () => {
       cleanup && cleanup();

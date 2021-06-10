@@ -16,6 +16,7 @@ export function renderAssets({
   assetsData: { [key: string]: any };
   spaceId: string;
   style: IStyles;
+  environment?: string;
   asset: string | null;
 }) {
   const assetsContainer = document.createElement("div");
@@ -57,7 +58,8 @@ export function renderAssets({
     const element = document.createElement("div");
     const link = constructAssetURL({
       spaceId,
-      asset: data.sys.id
+      asset: data.sys.id,
+      environment: data.sys.environment && data.sys.environment.sys.id
     });
 
     const linkNode = createElement({

@@ -22,6 +22,7 @@ export function showPopup({
 }: {
   node: HTMLElement;
   spaceId: string;
+  environment?: string;
   contentType: string | null;
   entry: string | null;
   asset: string | null;

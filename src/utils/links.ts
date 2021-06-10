@@ -8,36 +8,56 @@ export function constructSpaceURL({ spaceId }: { spaceId: string }) {
 
 export function constructContentTypeURL({
   spaceId,
-  contentType
+  contentType,
+  environment
 }: {
   spaceId: string;
   contentType: string;
+  environment?: string;
 }) {
-  return `${appPrefix}/spaces/${spaceId}/content_types/${contentType}/fields`;
+  return environment
+    ? `${appPrefix}/spaces/${spaceId}/environments/${environment}/content_types/${contentType}/fields`
+    : `${appPrefix}/spaces/${spaceId}/content_types/${contentType}/fields`;
 }
 
 export function constructEntryURL({
   spaceId,
-  entry
+  entry,
+  environment
 }: {
   spaceId: string;
   entry: string;
+  environment?: string;
 }) {
-  return `${appPrefix}/spaces/${spaceId}/entries/${entry}`;
+  return environment
+    ? `${appPrefix}/spaces/${spaceId}/environments/${environment}/entries/${entry}`
+    : `${appPrefix}/spaces/${spaceId}/entries/${entry}`;
 }
 
-export function constructMediaURL({ spaceId }: { spaceId: string }) {
-  return `${appPrefix}/spaces/${spaceId}/assets`;
+export function constructMediaURL({
+  spaceId,
+  environment
+}: {
+  spaceId: string;
+  environment: string | undefined;
+}) {
+  return environment
+    ? `${appPrefix}/spaces/${spaceId}/environments/${environment}/assets`
+    : `${appPrefix}/spaces/${spaceId}/assets`;
 }
 
 export function constructAssetURL({
   spaceId,
-  asset
+  asset,
+  environment
 }: {
   spaceId: string;
   asset: string;
+  environment?: string;
 }) {
-  return `${appPrefix}/spaces/${spaceId}/assets/${asset}`;
+  return environment
+    ? `${appPrefix}/spaces/${spaceId}/environments/${environment}/assets/${asset}`
+    : `${appPrefix}/spaces/${spaceId}/assets/${asset}`;
 }
 
 export function getEntryTitle({
