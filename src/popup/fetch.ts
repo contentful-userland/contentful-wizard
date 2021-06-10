@@ -13,7 +13,6 @@ import { renderEntriesByCt } from "./renderEntriesByCt";
 
 export function fetchContent({
   spaceId,
-  environment,
   contentType,
   entry,
   asset,
@@ -22,7 +21,6 @@ export function fetchContent({
   style
 }: {
   spaceId: string;
-  environment?: string;
   contentType: string | null;
   entry: string | null;
   asset: string | null;
@@ -41,7 +39,6 @@ export function fetchContent({
           contentType,
           contentTypesData,
           spaceId,
-          environment,
           style
         });
         const {
@@ -53,7 +50,6 @@ export function fetchContent({
           entriesData,
           entryTitle,
           spaceId,
-          environment,
           style
         });
 
@@ -78,8 +74,7 @@ export function fetchContent({
         if (contentType) {
           const contentTypeURL = constructContentTypeURL({
             contentType,
-            spaceId,
-            environment
+            spaceId
           });
           const ctLink = renderLink({
             href: contentTypeURL,
@@ -89,7 +84,7 @@ export function fetchContent({
         }
 
         if (entry) {
-          const entryURL = constructEntryURL({ spaceId, entry, environment });
+          const entryURL = constructEntryURL({ spaceId, entry });
           const entryLink = renderLink({
             href: entryURL,
             text: "Link to entry"
@@ -98,7 +93,7 @@ export function fetchContent({
         }
 
         if (asset) {
-          const assetURL = constructAssetURL({ spaceId, asset, environment });
+          const assetURL = constructAssetURL({ spaceId, asset });
           const assetLink = renderLink({
             href: assetURL,
             text: "Link to asset"

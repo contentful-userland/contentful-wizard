@@ -51,8 +51,7 @@ export function init({
   let cleanup: Function | null = attachHandlers({
     spaceId,
     entryTitle,
-    style: mergedStyle,
-    environment
+    style: mergedStyle
   });
 
   return {
@@ -62,8 +61,7 @@ export function init({
       cleanup = attachHandlers({
         spaceId,
         entryTitle,
-        style: mergedStyle,
-        environment
+        style: mergedStyle
       });
     },
     destroy: () => {
@@ -75,12 +73,10 @@ export function init({
 
 function attachHandlers({
   spaceId,
-  environment,
   entryTitle,
   style
 }: {
   spaceId: string;
-  environment?: string;
   entryTitle?: IEntryTitle;
   style: IStyles;
 }) {
@@ -103,7 +99,6 @@ function attachHandlers({
       entryTitle,
       node: el,
       spaceId,
-      environment,
       contentType,
       entry,
       description,

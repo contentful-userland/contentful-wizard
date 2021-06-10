@@ -11,13 +11,11 @@ import {
 export function renderContentTypes({
   contentTypesData,
   spaceId,
-  environment,
   style,
   contentType
 }: {
   contentTypesData: { [key: string]: any };
   spaceId: string;
-  environment?: string;
   style: IStyles;
   contentType: string | null;
 }) {
@@ -63,7 +61,7 @@ export function renderContentTypes({
     const link = constructContentTypeURL({
       spaceId,
       contentType: data.sys.id,
-      environment
+      environment: data.sys.environment && data.sys.environment.sys.id
     });
 
     const linkNode = createElement({

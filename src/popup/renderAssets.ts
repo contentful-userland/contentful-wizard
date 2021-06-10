@@ -10,7 +10,6 @@ import {
 export function renderAssets({
   assetsData,
   spaceId,
-  environment,
   style,
   asset
 }: {
@@ -60,7 +59,7 @@ export function renderAssets({
     const link = constructAssetURL({
       spaceId,
       asset: data.sys.id,
-      environment
+      environment: data.sys.environment && data.sys.environment.sys.id
     });
 
     const linkNode = createElement({

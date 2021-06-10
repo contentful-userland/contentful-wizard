@@ -12,7 +12,6 @@ export function renderEntries({
   contentTypesData,
   entriesData,
   spaceId,
-  environment,
   contentType,
   entryTitle,
   style
@@ -20,7 +19,6 @@ export function renderEntries({
   contentTypesData: { [key: string]: any };
   entriesData: { [key: string]: any };
   spaceId: string;
-  environment?: string;
   contentType: string;
   entryTitle?: IEntryTitle;
   style: IStyles;
@@ -66,7 +64,7 @@ export function renderEntries({
     const link = constructEntryURL({
       spaceId,
       entry,
-      environment
+      environment: data.sys.environment && data.sys.environment.sys.id
     });
 
     const linkNode = createElement({
